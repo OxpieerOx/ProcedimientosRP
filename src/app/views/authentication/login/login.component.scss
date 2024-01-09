@@ -1,0 +1,113 @@
+.login-card {
+	width: 450px;
+    position: relative;
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+    background: transparent;
+    backdrop-filter: blur(25px);
+    box-shadow: 0 0 25px rgba(0, 0, 0, .4);
+    border: 4px solid rgba(255, 255, 255, .4);
+}
+
+
+main {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+
+	#body-container {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		background: linear-gradient(300deg, rgba(28, 28, 28, 0.4), rgba(20, 40, 50, 0.4)), url("../../../../assets/images/hospitalBelen.jpeg");
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+}
+
+section.section-background {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.login-form {
+	padding: 40px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+}
+
+mat-form-field {
+	width: 100%;
+	margin: 10px 0;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+	color: #EBEBEB;
+	border-radius: 0.7rem 0.7rem 0 0 !important;
+	background-color: rgba(0, 0, 0, .25) !important;
+}
+
+::ng-deep .mat-select-value { color: #EBEBEB !important; }
+::ng-deep .mat-form-field-label { color: rgb(112, 148, 240) !important; }
+::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple { background-color: #052375; }
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-subscript-wrapper { padding: 0 .2em !important; }
+
+.mat-error {
+    color: #F19992;
+    font-weight: 600;
+	text-shadow: 0px 0px 2px #F31100;
+    font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+
+.recover-password {
+	color: #FFEABB;
+	text-align: center;
+}
+
+input {
+	border-radius: 0;
+	font-family: 'Arial', sans-serif;
+	transition: border-color 0.3s ease-in-out;
+}
+
+input.mat-input-element {
+	border: none;
+	box-shadow: none;
+	caret-color: #D5BC65;
+	background-color: transparent;
+}
+
+input:-webkit-autofill {
+	-webkit-text-fill-color: #fcfcfc;
+	transition: background-color 9000s ease-in-out 0s;
+}
+
+
+button[type="submit"] {
+	height: 50px;
+	width: 200px;
+	border: none;
+	font-weight: bold;
+	font-size: 1.2rem;
+	margin-top: 1.5rem;
+	border-radius: 1rem;
+	color: white !important;
+	background: linear-gradient(275deg, rgba(14, 98, 255, 0.8), rgba(40, 54, 255, 0.7));
+	transition: all 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover { transform: scale(1.1); }
+
+button[type=submit][disabled] {
+	opacity: 0.5;
+	color: #999;
+	cursor: not-allowed;
+	border-color: #999;
+	background-color: #ccc;
+}

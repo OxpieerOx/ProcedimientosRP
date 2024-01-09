@@ -1,0 +1,41 @@
+
+<main>
+	<div id="body-container">
+		<section class="section-background">
+			<mat-card class="login-card">
+				<div class="row">
+                    <div class="col-12">
+                        <img src="assets/images/logobelenlogo.png" alt="Logo" width="250"  style="display: block; margin: 0 auto" />
+                    </div>
+				</div>
+				<mat-card-content>
+					<form class="login-form" [formGroup]="loginForm">
+                        <mat-form-field appearance="fill">
+                            <mat-label>USUARIO</mat-label>
+                            <input matInput formControlName="username" required />
+                            <mat-error>Usuario requerido.</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>CONTRASEÑA</mat-label>
+                            <input matInput formControlName="password" type="password" required />
+                            <mat-error>Contraseña requerida.</mat-error>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" (click)="login()" type="submit" [disabled]="loginForm.invalid">
+                            INGRESAR
+                        </button>
+                    </form>
+                    
+				</mat-card-content>
+			</mat-card>
+		</section>
+	</div>
+</main>
+
+
+
+
+
+
+
+
+

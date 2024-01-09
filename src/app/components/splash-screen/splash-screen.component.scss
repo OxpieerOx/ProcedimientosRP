@@ -1,0 +1,50 @@
+#splash-screen {
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.fw-boldest {
+  font-weight: bold;
+}
+
+.text-white {
+  color: white;
+}
+
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.spinnerLogo {
+  animation: pulse 1s infinite ease-in-out, spin 4s infinite linear 2s; /* Se aplica la animación de escala durante 1 segundo y luego la animación de rotación durante 4 segundos */
+}
+
+
+#splash-screen img {
+  margin-left: calc(100vw - 100%);
+  margin-bottom: 30px;
+}
+
+#splash-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+
+
