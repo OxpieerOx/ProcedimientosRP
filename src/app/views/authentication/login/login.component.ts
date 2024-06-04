@@ -5,6 +5,8 @@ import { User } from 'src/app/models/user.model';
 import { SecurityService } from 'src/app/services/security.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SplashScreenService } from 'src/app/components/splash-screen/services/splash-screen.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SnackBarComponent } from 'src/app/components/snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ import { SplashScreenService } from 'src/app/components/splash-screen/services/s
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
+  private _duration = 5;
   user: User = new User();
   errorMessage: string = "";
 
@@ -22,6 +24,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private service: SecurityService,
+    private spinner: NgxSpinnerService,
     private snackBar: MatSnackBar,
     private _splash: SplashScreenService,) { }
 
@@ -33,23 +36,26 @@ export class LoginComponent implements OnInit {
   }
 
   public login() {
-    this._splash.show('Autenticando...');
     const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
   
     this.user.userName = username;
     this.user.password = password;
+    this.spinner.show();
   
     this.service.getToken(this.user).subscribe(
       response => {
         sessionStorage.setItem("token", response.token);
         this.redirectLogin();
+        this.spinner.hide();
       },
       error => {
-        this.errorMessage = <any>error;
-        console.log("error login", this.errorMessage);
-        this.router.navigate(['/login']);
-        this._splash.hide(); // Ocultar el splash en caso de error también
+        this.snackBar.openFromComponent(SnackBarComponent, {
+          data: { message: 'Tu usuario y/o contraseña son incorrectas' },
+          duration: this._duration * 1000,
+          panelClass: ['snack-bar-warning'],
+        });
+        this.spinner.hide(); 
       }
     );
   }

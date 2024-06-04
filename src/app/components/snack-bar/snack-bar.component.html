@@ -1,0 +1,10 @@
+<div class="snack-bar-content" style="display: flex; justify-content: space-between; align-items: center;">
+    <span class="snack-bar-message" matSnackBarLabel style="flex-grow: 1; display: flex; align-items: center;">
+        {{ message }}
+    </span>
+    <span class="snack-bar-close" matSnackBarActions style="margin-left: 8px;"> <!-- Ajusta el margen según sea necesario -->
+        <button mat-icon-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">
+            <app-svg-icon icon="close" class="svg-white"></app-svg-icon>
+        </button>
+    </span>
+</div>

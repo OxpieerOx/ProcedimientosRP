@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SplashScreenService } from './components/splash-screen/services/splash-screen.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -14,19 +15,15 @@ export class AppComponent implements OnInit{
 
   constructor(
 		private splashScreenService: SplashScreenService,
-		private router: Router
+		private router: Router,
+		private spinner: NgxSpinnerService
 	) { }
 
-  ngOnInit() {
-		const routerSubscription = this.router.events.subscribe((event) => {
-			if (event instanceof NavigationEnd) {
-				this.splashScreenService.hide();
-
-				// scroll to top on every route change
-				window.scrollTo(0, 0);
-			}
-		});
-
-		this.unsubscribe.push(routerSubscription);
-	}
+	ngOnInit() {
+		this.spinner.show();
+	
+		setTimeout(() => {
+		  this.spinner.hide();
+		}, 1000);
+	  }
 }

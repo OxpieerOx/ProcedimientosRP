@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentsModule } from './components/components.module';
 import { SplashScreenService } from './components/splash-screen/services/splash-screen.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SplashScreenService } from './components/splash-screen/services/splash-
     HttpClientModule,
     ComponentsModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
   providers: [
     SplashScreenService,
