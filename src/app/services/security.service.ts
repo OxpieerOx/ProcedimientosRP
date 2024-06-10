@@ -18,7 +18,7 @@ const httpOptions = {
 export class SecurityService {
 
   
-  private urlService = environment.apiEndPoint + 'api/auth';
+  private urlService = environment.apiEndPoint + 'auth/login';
 
   constructor(private http: HttpClient) { }
 
@@ -26,15 +26,15 @@ export class SecurityService {
     console.log(JSON.stringify(user));
     return this.http.post<any>(this.urlService, JSON.stringify(user), httpOptions).pipe(
       map((res: HttpResponse<any>) => {
-        console.log("Show body: ", res.body);
-        console.log("Show token: ", res.body.token);
+        console.log("Show body: ", res.body.data);
+        console.log("Show token: ", res.body.data.token);
         // if (res.headers.has("Authorization")) {
         //   user.token = res.headers.get("Authorization")!;
         //   localStorage.setItem('token', 'Bearer ' + res.headers.get("Authorization"));
         // }
-        if (res.body.token) {
-          user.token = res.body.token;
-          localStorage.setItem('token', 'Bearer ' + res.body.token);
+        if (res.body.data.token) {
+          user.token = res.body.data.token;
+          localStorage.setItem('token', 'Bearer ' + res.body.data.token);
         }
         return user;
       }),

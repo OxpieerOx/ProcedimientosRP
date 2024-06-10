@@ -4,6 +4,7 @@ import { SplashScreenComponent } from './splash-screen/splash-screen.component';
 import { SplashScreenService } from './splash-screen/services/splash-screen.service';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 
@@ -11,13 +12,15 @@ import { SvgIconComponent } from './svg-icon/svg-icon.component';
   declarations: [
     SplashScreenComponent,
     SnackBarComponent,
-    SvgIconComponent
+    SvgIconComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule
   ],
   exports: [
-    SplashScreenComponent
+    SplashScreenComponent,
+    SidebarComponent
   ],
   providers: [
     SplashScreenService,

@@ -39,10 +39,9 @@ export class LoginComponent implements OnInit {
     const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
   
-    this.user.userName = username;
+    this.user.username = username;
     this.user.password = password;
     this.spinner.show();
-  
     this.service.getToken(this.user).subscribe(
       response => {
         sessionStorage.setItem("token", response.token);

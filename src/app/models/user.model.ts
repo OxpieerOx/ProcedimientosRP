@@ -1,10 +1,10 @@
 export class User {
-    userName: string;
+    username: string;
     password: string;
     token: string;
 
     constructor(options?: Partial<User>) {
-        this.userName = options?.userName || '';
+        this.username = options?.username || '';
         this.password = options?.password || '';
         this.token = options?.token || '';
     }
