@@ -1,0 +1,34 @@
+.toolbar {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .welcome {
+    font-weight: bold;
+    margin-left: 200px;
+  }
+  
+  .nav-auth {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-auth li {
+    margin-right: 15px;
+  }
+  
+  .nav-auth a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .spacer {
+    flex-grow: 1;
+  }
+  

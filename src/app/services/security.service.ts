@@ -28,6 +28,7 @@ export class SecurityService {
       map((res: HttpResponse<any>) => {
         console.log("Show body: ", res.body.data);
         console.log("Show token: ", res.body.data.token);
+        localStorage.setItem('user', user.username);
         // if (res.headers.has("Authorization")) {
         //   user.token = res.headers.get("Authorization")!;
         //   localStorage.setItem('token', 'Bearer ' + res.headers.get("Authorization"));
@@ -35,6 +36,7 @@ export class SecurityService {
         if (res.body.data.token) {
           user.token = res.body.data.token;
           localStorage.setItem('token', 'Bearer ' + res.body.data.token);
+          
         }
         return user;
       }),

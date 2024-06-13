@@ -24,4 +24,9 @@ export class AutenticacionService {
       return false;
     }
   }
+
+  logout(): void {
+    sessionStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
 }
