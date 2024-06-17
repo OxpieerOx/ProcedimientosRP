@@ -1,10 +1,29 @@
-<nav class="toolbar">
-    <div class="welcome">
-      <span>!Bienvenido! {{usuario}}</span>
+<!-- ============================================================== -->
+<!-- Topbar header - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<style>
+    .hospital-belen {
+        font-family: 'Arial', sans-serif; /* Puedes cambiar a la fuente que prefieras */
+        font-size: 20px; /* Ajusta el tamaño de la fuente según sea necesario */
+        color: #ffffff; /* Color del texto */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Sombra para un efecto bonito */
+        transition: color 0.3s ease, text-shadow 0.3s ease; /* Transiciones suaves */
+        margin-left: 20px;
+    }
+
+    .hospital-belen:hover {
+        color: #000000; /* Color del texto al pasar el mouse */
+        text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el mouse */
+    }
+</style>
+<header class="topbar">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="index.html">
+            <!-- Logo icon --><b>
+            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //--><!-- Dark Logo icon -->
+                <img src="../../../assets/images/logobelenlogo.png" alt="homepage" width="50" height="40" /> 
+                <span class="hospital-belen">PMHB</span>
+            </b>
+           </a>
     </div>
-    <div class="spacer"></div>
-    <ul class="nav-auth">
-        <button type="button" class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
-    </ul>
-  </nav>
-  
+</header>

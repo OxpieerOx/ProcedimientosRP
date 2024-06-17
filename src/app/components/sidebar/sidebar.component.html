@@ -1,29 +1,58 @@
-<div class="sidebar">
-    <div class="sidebar-header">
-      <a href="#" class="brand">
-        <span class="brand-icon">
-          <i class="fas fa-hospital"></i>
-        </span>
-        <span class="brand-text">Hospital Belen</span>
-      </a>
+<aside class="left-sidebar">
+    
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+      <!-- Sidebar navigation-->
+      <nav class="sidebar-nav">
+        <ul id="sidebarnav">
+          <!-- Menú de Usuario -->
+          <li class="user-profile">
+            <a class="has-arrow waves-effect waves-dark"
+               href="javascript:void(0)"
+               (click)="toggleUserMenu()"
+               [attr.aria-expanded]="isUserMenuOpen ? 'true' : 'false'"
+               aria-haspopup="true">
+               <img src="../../../assets/images/doctor icon.png" alt="user" />
+               <span class="hide-menu">Hola! {{username}} </span>
+            </a>
+            <ul *ngIf="isUserMenuOpen">
+              <li><a routerLink="/login">Logout</a></li>
+            </ul>
+          </li>
+          <!-- Fin Menú de Usuario -->
+  
+          <li class="nav-devider"></li>
+          <li class="nav-small-cap">PERSONAL</li>
+  
+          <!-- Menú de Ítems -->
+          <li *ngFor="let item of menuItems">
+            <a class="has-arrow waves-effect waves-dark"
+               href="javascript:void(0)"
+               (click)="toggleCollapse(item)"
+               [attr.aria-expanded]="item.expanded ? 'true' : 'false'"
+               aria-haspopup="true">
+              <i [class]="item.icono"></i>
+              <span class="hide-menu">
+                {{ item.titulo }}
+                <span class="label label-rouded label-themecolor pull-right">
+                  {{ item.submenu.length }}
+                </span>
+              </span>
+            </a>
+            <ul *ngIf="item.expanded" aria-expanded="false">
+              <li *ngFor="let subMenuItem of item.submenu">
+                <a [routerLink]="subMenuItem.url"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }">{{ subMenuItem.titulo }}</a>
+              </li>
+            </ul>
+          </li>
+          <!-- Fin Menú de Ítems -->
+  
+        </ul>
+      </nav>
+      <!-- End Sidebar navigation -->
     </div>
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item">
-        <span class="nav-icon"><i class="fas fa-calendar-alt"></i></span>
-        <span class="nav-text">Citas</span>
-      </a>
-      <a href="#" class="nav-item">
-        <span class="nav-icon"><i class="fas fa-users"></i></span>
-        <span class="nav-text">Pacientes</span>
-      </a>
-      <a href="#" class="nav-item">
-        <span class="nav-icon"><i class="fas fa-user-md"></i></span>
-        <span class="nav-text">Médicos</span>
-      </a>
-      <a href="#" class="nav-item">
-        <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
-        <span class="nav-text">Reportes</span>
-      </a>
-    </nav>
-  </div>
+    <!-- End Sidebar scroll-->
+  </aside>
   

@@ -1,7 +1,46 @@
-<div class="sidebar-container">
+
+
+
+<div id="main-wrapper">
+
+    <app-toolbar></app-toolbar>
+
     <app-sidebar></app-sidebar>
-  </div>
-  <app-toolbar></app-toolbar>
-  <div class="content">
-    <router-outlet></router-outlet>
-  </div>
+
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs -->
+          
+
+            <!-- Mi sistema de rutas -->
+            <router-outlet></router-outlet>
+
+            <!-- 
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer">
+            © 2024 Hosptai Belen Sofware Procedimientos Medicos By Pieer Rodas Vereau
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+
+    </div>
+
+
+</div>
+

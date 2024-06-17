@@ -4,7 +4,7 @@ import { AutenticacionService } from 'src/app/services/autenticacion.service';
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.css']
+  styleUrls: []
 })
 export class ToolbarComponent implements OnInit {
 

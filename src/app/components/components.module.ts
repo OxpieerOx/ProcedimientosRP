@@ -5,6 +5,7 @@ import { SplashScreenService } from './splash-screen/services/splash-screen.serv
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { RouterModule } from '@angular/router';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
@@ -18,7 +19,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     ToolbarComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   exports: [
     SplashScreenComponent,
