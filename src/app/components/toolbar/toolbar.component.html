@@ -3,27 +3,53 @@
 <!-- ============================================================== -->
 <style>
     .hospital-belen {
-        font-family: 'Arial', sans-serif; /* Puedes cambiar a la fuente que prefieras */
-        font-size: 20px; /* Ajusta el tamaño de la fuente según sea necesario */
-        color: #ffffff; /* Color del texto */
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Sombra para un efecto bonito */
-        transition: color 0.3s ease, text-shadow 0.3s ease; /* Transiciones suaves */
+        font-family: 'Arial', sans-serif;
+        font-size: 20px;
+        color: #ffffff;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        transition: color 0.3s ease, text-shadow 0.3s ease;
         margin-left: 20px;
     }
 
     .hospital-belen:hover {
-        color: #000000; /* Color del texto al pasar el mouse */
-        text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5); /* Sombra más intensa al pasar el mouse */
+        color: #000000;
+        text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
     }
+    .logout-button {
+    margin-left: 10px; /* Margen izquierdo de 10px */
+}
+
+.logout-button a {
+    display: block; /* Convertir el enlace en un bloque para ocupar el espacio completo del <li> */
+    padding: 10px; /* Espaciado interno */
+    background-color: #ff6347; /* Fondo rojo */
+    color: #fff; /* Color del texto */
+    text-decoration: none; /* Quitar subrayado del texto */
+}
+
+.logout-button a:hover {
+    background-color: #cc4125; /* Cambio de color al pasar el mouse */
+}
+
 </style>
+
 <header class="topbar">
     <div class="navbar-header">
         <a class="navbar-brand" href="index.html">
-            <!-- Logo icon --><b>
-            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //--><!-- Dark Logo icon -->
-                <img src="../../../assets/images/logobelenlogo.png" alt="homepage" width="50" height="40" /> 
-                <span class="hospital-belen">PMHB</span>
-            </b>
-           </a>
+            <img src="../../../assets/images/logobelenlogo.png" alt="homepage" width="50" height="40" /> 
+            <span class="hospital-belen">PMHB</span>
+        </a>
     </div>
+    <ul class="nav navbar-nav navbar-right" style="
+    margin-right: 10px;
+    margin-top: 5px;
+">
+        <!-- Otros elementos de la barra de herramientas -->
+        <!-- Aquí agregamos el botón de Logout -->
+        <li class="logout-button">
+            <a (click)="logout()" class="cursor">
+                <i class="fa fa-power-off"></i> Logout
+            </a>
+        </li>
+    </ul>
 </header>

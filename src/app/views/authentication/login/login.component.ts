@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.spinner.show();
     this.service.getToken(this.user).subscribe(
       response => {
-        sessionStorage.setItem("token", response.token);
+        localStorage.setItem("token", response.token);
         this.redirectLogin();
         this.spinner.hide();
       },

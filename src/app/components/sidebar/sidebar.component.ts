@@ -8,25 +8,24 @@ import { SidebarService } from 'src/app/services/sidebar.service';
   styleUrls: []
 })
 export class SidebarComponent implements OnInit {
-  public menuItems: any[];
+  public menuItems: any[] = [];
   public isUserMenuOpen: boolean = false; 
   public isMenuitemOpen: boolean = false; 
   public username: string = '';
 
-  constructor(private sidebarService: SidebarService,
-             ) {
-    this.menuItems = sidebarService.menu;
+  constructor(private sidebarService: SidebarService) {
     const storedUser = localStorage.getItem('user');
-    
     if (storedUser) {
       this.username = storedUser;
     }
   }
 
   ngOnInit(): void {
-   
+    this.sidebarService.menu$.subscribe(menu => {
+      this.menuItems = menu;
+    });
+    this.sidebarService.loadMenu(this.username);
   }
-
   toggleUserMenu(): void {
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }

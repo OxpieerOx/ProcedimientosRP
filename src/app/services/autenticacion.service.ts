@@ -14,7 +14,7 @@ export class AutenticacionService {
   }
 
   canActivate() {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) {
       console.log("Token encontrado:", token);
       return true;
@@ -26,7 +26,8 @@ export class AutenticacionService {
   }
 
   logout(): void {
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 }
