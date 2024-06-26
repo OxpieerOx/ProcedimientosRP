@@ -7,6 +7,7 @@ import { SvgIconComponent } from './svg-icon/svg-icon.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 
 
@@ -16,7 +17,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     SnackBarComponent,
     SvgIconComponent,
     SidebarComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    BreadcrumbsComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     SplashScreenComponent,
     SidebarComponent,
     ToolbarComponent,
+    BreadcrumbsComponent
   ],
   providers: [
     SplashScreenService,

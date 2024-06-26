@@ -13,30 +13,22 @@ export class SidebarService {
     {
       titulo: 'Home',
       icono: 'mdi mdi-home',
-      submenu: [
-        { titulo: 'Main', url: '/' },
-      ]
+      url: '/'
     },
     {
       titulo: 'Programacion',
       icono: 'mdi mdi-calendar-check',
-      submenu: [
-        { titulo: 'Main', url: '/' },
-      ]
+      url: 'programacion'
     },
     {
       titulo: 'Citas',
       icono: 'mdi mdi-stethoscope',
-      submenu: [
-        { titulo: 'Main', url: '/' },
-      ]
+      url: '/'
     },
     {
       titulo: 'Atencion',
       icono: 'mdi mdi-hospital',
-      submenu: [
-        { titulo: 'Main', url: '/' },
-      ]
+      url: '/'
     },
   ];
 
@@ -58,7 +50,6 @@ export class SidebarService {
       },
       error => {
         console.error('Error al cargar roles:', error);
-        // Manejar el error según tu caso
       }
     );
   }

@@ -5,6 +5,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HomeComponent } from './home/home.component';
+import { ProgramacionIndexComponent } from './programacion/programacion-index/programacion-index.component';
 
 
 
@@ -14,6 +15,7 @@ import { HomeComponent } from './home/home.component';
   declarations: [
     DashboardComponent,
     HomeComponent,
+    ProgramacionIndexComponent,
   ],
   imports: [
     CommonModule,
