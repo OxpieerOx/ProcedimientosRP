@@ -14,7 +14,7 @@ import { SnackBarComponent } from 'src/app/components/snack-bar/snack-bar.compon
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  private _duration = 5;
+  private _duration = 20;
   user: User = new User();
   errorMessage: string = "";
 

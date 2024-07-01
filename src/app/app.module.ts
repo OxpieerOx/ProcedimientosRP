@@ -8,6 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentsModule } from './components/components.module';
 import { SplashScreenService } from './components/splash-screen/services/splash-screen.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FlatpickrModule } from 'angularx-flatpickr';
+
 
 
 @NgModule({
@@ -15,6 +17,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     AppComponent,
   ],
   imports: [
+    FlatpickrModule.forRoot(),
     BrowserModule,
     HttpClientModule,
     ComponentsModule,

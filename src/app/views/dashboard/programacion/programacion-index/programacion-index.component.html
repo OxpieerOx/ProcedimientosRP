@@ -1,51 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programacion</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
 
 <div class="container">
     <div class="row animated fadeIn fast">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <input type="text" class="form-control" placeholder="Buscar usuario..."/>
-                </div>
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-row">
+              <!-- Dropdown para seleccionar servicio -->
+              <div class="col-md-4 mb-3">
+                <label for="selectServicio">Seleccione el servicio:</label>
+                <select class="form-control" id="selectServicio" [(ngModel)]="selectServicio" (ngModelChange)="onServicioChange()">
+                  <option *ngFor="let servicio of servicios" [value]="servicio.serviceId">{{ servicio.serviceName }}</option>
+                </select>
+              </div>
+              <!-- Dropdown para seleccionar procedimiento -->
+              <div class="col-md-4 mb-3">
+                <label for="selectProcedimiento">Seleccione el procedimiento:</label>
+                <select class="form-control" id="selectProcedimiento" [(ngModel)]="selectProcedimiento" (ngModelChange)="onProcedimientoChange()" [disabled]="!selectServicio">
+                  <option *ngFor="let procedimiento of procedimientos" [value]="procedimiento.id">{{ procedimiento.nombre }}</option>
+                </select>
+              </div>
             </div>
+          </div>
         </div>
-    </div> 
+      </div>
+    </div>
 
-    <!-- Mensaje de cargando -->
-    <div class="row animated fadeIn fast">
-        <div class="col-12">
+      <!-- Botón de Agregar Programación -->
+  <div class="row animated fadeIn fast">
+    <div class="col-12">
+      <div class="d-flex justify-content-end mb-3">
+        <button mat-raised-button color="primary" (click)="openDialog(null,selectProcedimiento)">Agregar Programación</button>
+      </div>
+    </div>
+  </div>
+
+
+        <!-- Mensaje de cargando -->
+        <div class="row animated fadeIn fast" *ngIf="!programaciones.length && isLoadingProgramaciones">
+          <div class="col-12">
             <div class="alert alert-info text-center">
-                <h4 class="alert-heading">Cargando</h4>
-                <i class="fa fa-spin fa-refresh fa-2x"></i>
-                <p class="mb-0">Por favor espere</p>
+              <h4 class="alert-heading">Cargando</h4>
+              <i class="fa fa-spin fa-refresh fa-2x"></i>
+              <p class="mb-0">Por favor espere</p>
             </div>
+          </div>
         </div>
-    </div> 
-
-    <!-- Tabla de usuarios -->
-    <div class="row animated fadeIn fast">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Total de usuarios (10)</h4>
-                    <h6 class="card-subtitle">Usuarios registrados en mi aplicación</h6>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="w100">Avatar</th>
-                                    <th>Correo</th>
-                                    <th>Nombre</th>
-                                    <th class="w140">Role</th>
-                                    <th class="w100">Auth</th>
-                                    <th class="text-nowrap w100">Acciones</th>
-                           
+        
+        <!-- Mostrar mensaje de lista vacía si no hay programaciones disponibles -->
+        <div class="row animated fadeIn fast" *ngIf="!programaciones.length && !isLoadingProgramaciones">
+          <div class="col-12">
+            <div class="alert alert-warning text-center">
+              <h4 class="alert-heading">Sin Programaciones</h4>
+              <p class="mb-0">No hay programaciones disponibles actualmente.</p>
+            </div>
+          </div>
+        </div>
+        
+  
+    <!-- Tabla de programaciones -->
+    <div class="row animated fadeIn fast" *ngIf="programaciones.length">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Total de Programaciones ({{programaciones.length}})</h4>
+            <h6 class="card-subtitle">Programaciones registradas en mi aplicación</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Tiempo Promedio</th>
+                    <th>Fecha Registro</th>
+                    <th>Medico</th>
+                    <th>Procedimiento</th>
+                    <th class="text-nowrap w100">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let programacion of programaciones">
+                    <td>{{ programacion.fecha }}</td>
+                    <td>{{ programacion.horaInicio }}</td>
+                    <td>{{ programacion.horaFin }}</td>
+                    <td>{{ programacion.tiempoPromedio }}</td>
+                    <td>{{ programacion.fechaRegistro }}</td>
+                    <td>{{ programacion.medico.nombre }}</td>
+                    <td>{{ programacion.procedimiento.nombre }}</td>
+                    <td>
+                        <button mat-icon-button (click)="openDialog(programacion.id,programacion.procedimiento.id)" >
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                      </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
