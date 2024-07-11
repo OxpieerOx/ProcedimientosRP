@@ -1,0 +1,117 @@
+<div class="container">
+  <div class="row animated fadeIn fast">
+    <!-- Filter box: Calendar, service, procedure -->
+    <div class="col-md-12 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="form-row justify-content-center">
+            <!-- Calendar for selecting date and time -->
+            <div class="col-md-4 mb-3">
+              <label for="inlineDatePicker">Seleccionar Fecha y Hora</label>
+              <div class="panel panel-default">
+                <div class="panel-body inline-flatpickr">
+                  <input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="inlineDatePicker"
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [inline]="true"
+                    (ngModelChange)="onProcedimientoChange()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row justify-content-center">
+            <!-- Dropdown for selecting service and procedure -->
+            <div class="col-md-4 mb-3">
+              <label for="selectServicio">Seleccione el servicio:</label>
+              <select class="form-control" id="selectServicio" [(ngModel)]="selectServicio" (ngModelChange)="onServicioChange()">
+                <option *ngFor="let servicio of servicios" [value]="servicio.serviceId">{{ servicio.serviceName }}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="selectProcedimiento">Seleccione el procedimiento:</label>
+              <select class="form-control" id="selectProcedimiento" [(ngModel)]="selectProcedimiento" (ngModelChange)="onProcedimientoChange()" [disabled]="!selectServicio">
+                <option *ngFor="let procedimiento of procedimientos" [value]="procedimiento.id">{{ procedimiento.nombre }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje de cargando -->
+  <div class="row animated fadeIn fast" *ngIf="!citas.length && isLoadingCitas">
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        <h4 class="alert-heading">Cargando</h4>
+        <i class="fa fa-spin fa-refresh fa-2x"></i>
+        <p class="mb-0">Por favor espere</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mostrar mensaje de lista vacía si no hay programaciones disponibles -->
+  <div class="row animated fadeIn fast" *ngIf="!citas.length && !isLoadingCitas">
+    <div class="col-12">
+      <div class="alert alert-warning text-center">
+        <h4 class="alert-heading">Sin Citas</h4>
+        <p class="mb-0">No hay Citas disponibles para la Fecha Escogida y Procedimiento Escogido.</p>
+        <p class="mb-0">Por favor Agregar una programacion para el dia de hoy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table of appointments -->
+  <div class="row animated fadeIn fast" *ngIf="citas.length">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Total de Citas ({{ citas.length }})</h4>
+          <h6 class="card-subtitle">Citas registradas en mi aplicación</h6>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Hora Inicio</th>
+                  <th>Hora Fin</th>
+                  <th>Estado</th>
+                  <th>Paciente</th>
+                  <th>Número de Cuenta</th>
+                  <th>Médico</th>
+                  <th>Procedimiento</th>
+                  <th class="text-nowrap w100">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let cita of citas">
+                  <td>{{ cita.fecha | date: 'MM/dd/yyyy' }}</td>
+                  <td>{{ cita.horaInicio | date: 'HH:mm' }}</td>
+                  <td>{{ cita.horaFin | date: 'HH:mm' }}</td>
+                  <td>{{ cita.estado }}</td>
+                  <td>{{ cita.idPaciente }}</td>
+                  <td>{{ cita.nroCuenta }}</td>
+                  <td>{{ cita.medico }}</td>
+                  <td>{{ cita.procedimiento }}</td>
+                  <td>
+                    <button mat-icon-button *ngIf="cita.idPaciente !== 'Sin Asignar'">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="openDialog(cita)">
+                      <mat-icon >add</mat-icon> 
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

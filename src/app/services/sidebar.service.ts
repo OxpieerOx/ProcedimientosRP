@@ -23,7 +23,7 @@ export class SidebarService {
     {
       titulo: 'Citas',
       icono: 'mdi mdi-stethoscope',
-      url: '/'
+      url: 'citas'
     },
     {
       titulo: 'Atencion',

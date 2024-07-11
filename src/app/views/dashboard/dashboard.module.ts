@@ -19,6 +19,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
+import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
+import { CitasAddComponent } from './citas/citas-add/citas-add.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { DatePipe } from '@angular/common';
     HomeComponent,
     ProgramacionIndexComponent,
     ProgramacionEditComponent,
+    CitasIndexComponent,
+    CitasAddComponent,
   ],
   imports: [
     CommonModule,

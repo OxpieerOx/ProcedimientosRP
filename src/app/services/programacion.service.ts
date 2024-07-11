@@ -28,7 +28,7 @@ export class ProgramacionService {
       .pipe(map(response => response.data));
   }
 
-  buscarPorFechaYProcedimiento(fecha: string, idProcedimiento: number): Observable<Programacion[]> {
+  buscarPorFechaYProcedimiento(fecha: string, idProcedimiento: number): Observable<Programacion> {
     const token = localStorage.getItem('token');
     const httpOptions = {
       headers: new HttpHeaders({
@@ -37,7 +37,7 @@ export class ProgramacionService {
       })
     };
     const url = `${this.urlService}/${fecha}/${idProcedimiento}`;
-    return this.http.get<{ result: boolean, data: Programacion[] }>(url, httpOptions)
+    return this.http.get<{ result: boolean, data: Programacion }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
 

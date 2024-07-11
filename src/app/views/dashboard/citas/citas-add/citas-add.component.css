@@ -1,0 +1,13 @@
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .patient-info-box {
+    background-color: #f9f9f9;
+  }
+  
+  .close {
+    cursor: pointer;
+  }

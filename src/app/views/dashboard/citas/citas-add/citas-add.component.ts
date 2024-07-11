@@ -1,0 +1,114 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CitaListado } from 'src/app/models/citalistado.model';
+import { Paciente } from 'src/app/models/paciente.model';
+import { CitaRequestDTO, EstadoCita } from 'src/app/models/request/citarequest.model';
+import { CitaService } from 'src/app/services/cita.service';
+import { PacienteService } from 'src/app/services/paciente.service';
+
+@Component({
+  selector: 'app-citas-add',
+  templateUrl: './citas-add.component.html',
+  styleUrls: ['./citas-add.component.css']
+})
+export class CitasAddComponent implements OnInit {
+
+
+  assignPatientForm: FormGroup;
+  patientInfo: Paciente;
+  isLoading: boolean = false;
+  searchFailed: boolean = false;
+  patientFound: boolean = false;
+  citaData: CitaListado;
+
+  constructor(
+    public dialogRef: MatDialogRef<CitasAddComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService,
+    private patientService: PacienteService,
+    private citaService:CitaService// Inject your service here
+  ) {
+    this.patientInfo = new Paciente();
+    this.assignPatientForm = this.fb.group({
+      patientSearch: ['', Validators.required]
+    });
+    
+    this.citaData = data.cita;
+    console.log("data",this.citaData)
+  }
+
+  ngOnInit(): void {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  onSearch(): void {
+    if (this.assignPatientForm.valid) {
+      this.isLoading = true;
+      this.searchFailed = false;
+      this.patientFound = false; // Reset patientFound flag
+      const searchTerm = this.assignPatientForm.value.patientSearch;
+      this.patientService.buscarPacientePorId(searchTerm).subscribe(
+        (data) => {
+          this.isLoading = false;
+          if (data) {
+            this.patientInfo = data;
+            this.patientFound = true; // Set patientFound flag to true
+          } else {
+            this.searchFailed = true;
+            this.patientInfo = new Paciente();
+            this.patientFound = false; // Set patientFound flag to false
+          }
+        },
+        (error) => {
+          this.isLoading = false;
+          this.searchFailed = true;
+          this.snackBar.open('Error al buscar el paciente', 'Cerrar', {
+            duration: 5000,
+            panelClass: ['snack-bar-warning']
+          });
+          this.patientInfo = new Paciente();
+          this.patientFound = false; // Set patientFound flag to false
+        }
+      );
+    }
+  }
+  onAssign(): void {
+    if (this.patientFound) {
+      const citaRequest = new CitaRequestDTO({
+        idPaciente: this.patientInfo.IdPaciente,
+        nroCuenta: this.assignPatientForm.value.patientSearch,
+        fecha: this.citaData.fecha,
+        horaInicio: this.citaData.horaInicio,
+        horaFin: this.citaData.horaFin,
+        idProgramacion: this.citaData.idProgramacion,
+        idMedico: this.citaData.idMedico,
+        usuarioCreador: this.citaData.usuarioCreador,
+        esAdicional: this.citaData.esAdicional,
+        estado: EstadoCita.PAGADO // Estado inicial de la cita
+      });
+  
+      this.citaService.insertarCita(citaRequest).subscribe(
+        response => {
+          this.snackBar.open('Cita guardada con éxito', 'Cerrar', {
+            duration: 5000,
+            panelClass: ['snack-bar-success']
+          });
+          this.dialogRef.close({ success: true, citaRequest: response });
+        },
+        error => {
+          this.snackBar.open('Error al guardar la cita', 'Cerrar', {
+            duration: 5000,
+            panelClass: ['snack-bar-warning']
+          });
+        }
+      );
+    }
+  }
+}

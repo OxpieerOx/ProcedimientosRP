@@ -110,9 +110,49 @@ export class ProgramacionEditComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  parseTimeStringToDate(timeString: string): Date {
+    if (!timeString) {
+      return new Date();
+    }
+  
+    const [hours, minutes] = timeString.split(':').map(Number);
+    if (isNaN(hours) || isNaN(minutes)) {
+      return new Date();
+    }
+  
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+  }
+
   onSubmit(): void {
     if (this.programacionForm.valid) {
       const formData = this.programacionForm.value;
+      const horaInicio = this.parseTimeStringToDate(formData.horaInicio);
+    const horaFin = this.parseTimeStringToDate(formData.horaFin);
+
+    // Verificar si las fechas son válidas
+    if (!horaInicio || !horaFin) {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Formato de hora inválido. Por favor, ingrese horas válidas.' },
+        duration: this._duration * 1000,
+        panelClass: ['snack-bar-warning']
+      });
+      return;
+    }
+
+    // Calcular la diferencia en minutos entre horaInicio y horaFin
+    const diffMinutes = (horaFin.getTime() - horaInicio.getTime()) / (1000 * 60);
+
+    // Validar si tiempoPromedio excede la diferencia calculada en minutos
+    if (formData.tiempoPromedio > diffMinutes) {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'El tiempo promedio no puede exceder la diferencia entre hora de inicio y hora de fin.' },
+        duration: this._duration * 1000,
+        panelClass: ['snack-bar-warning']
+      });
+      return; // Salir del método si tiempoPromedio es mayor que la diferencia
+    }
       const programacionRequest = new ProgramacionRequest({
         fecha: formData.fecha,
         horaInicio: formData.horaInicio,
