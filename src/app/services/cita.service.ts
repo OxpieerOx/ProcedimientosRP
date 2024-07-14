@@ -28,7 +28,7 @@ export class CitaService {
       .pipe(map(response => response.data));
   }
 
-  buscarporId(id: number): Observable<Cita> {
+  buscarporId(id: number): Observable<Cita[]> {
     const token = localStorage.getItem('token');
     const httpOptions = {
       headers: new HttpHeaders({
@@ -37,7 +37,7 @@ export class CitaService {
       })
     };
     const url = `${this.urlService}/${id}`;
-    return this.http.get<{ result: boolean, data: Cita }>(url, httpOptions)
+    return this.http.get<{ result: boolean, data: Cita[] }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
 }

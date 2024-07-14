@@ -19,6 +19,7 @@ import { ProgramacionService } from 'src/app/services/programacion.service';
 })
 export class ProgramacionEditComponent implements OnInit {
   programacionId: number;
+  servicioId:number;
   procedimientoId: number;
   programacion: Programacion = new Programacion();
   modalTitle: string; 
@@ -36,6 +37,7 @@ export class ProgramacionEditComponent implements OnInit {
     private datePipe: DatePipe,
     private fb: FormBuilder
   ) {
+    this.servicioId = data.servicioId;
     this.procedimientoId = data.procedimientoId;
     this.programacionId = data.programacionId;
     this.modalTitle = this.programacionId ? 'Editar Programación' : 'Crear Programación';
@@ -58,7 +60,7 @@ export class ProgramacionEditComponent implements OnInit {
   }
 
   loadMedicos(): void {
-    this.medicoService.listAllMedicos().subscribe(
+    this.medicoService.buscarMedicoPorServicio(this.servicioId ).subscribe(
       medicos => {
         this.medicos = medicos;
       },

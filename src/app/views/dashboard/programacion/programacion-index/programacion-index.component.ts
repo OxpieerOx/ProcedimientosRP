@@ -70,7 +70,7 @@ export class ProgramacionIndexComponent implements OnInit {
     });
   }
 
-  openDialog(programacionId: any,procedimientoId: any): void {
+  openDialog(programacionId: any,procedimientoId: any,servicioId:any): void {
     if (!this.selectProcedimiento) {
       this.snackBar.open('Selecciona un procedimiento primero', 'Cerrar', {
         duration: 5000,
@@ -80,7 +80,7 @@ export class ProgramacionIndexComponent implements OnInit {
     }
     const dialogRef = this.dialog.open(ProgramacionEditComponent, {
       width: '500px',
-      data: { programacionId: programacionId , procedimientoId:procedimientoId}
+      data: { programacionId: programacionId , procedimientoId:procedimientoId, servicioId:servicioId}
     });
 
     dialogRef.afterClosed().subscribe(result => {

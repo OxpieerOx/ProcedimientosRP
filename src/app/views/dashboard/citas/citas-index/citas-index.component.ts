@@ -10,6 +10,7 @@ import { ProcedimientoService } from 'src/app/services/procedimiento.service';
 import { ProgramacionService } from 'src/app/services/programacion.service';
 import { ServicioService } from 'src/app/services/servicio.service';
 import { CitasAddComponent } from '../citas-add/citas-add.component';
+import { CitaService } from 'src/app/services/cita.service';
 
 @Component({
   selector: 'app-citas-index',
@@ -23,6 +24,7 @@ export class CitasIndexComponent implements OnInit {
   procedimientos: Procedimiento[] = [];
   selectServicio: any;
   selectProcedimiento: any;
+  programacion:Programacion;
   inlineDatePicker: Date = new Date();
   citas: CitaListado[] = [];
   isLoadingCitas: boolean = false;
@@ -32,10 +34,14 @@ export class CitasIndexComponent implements OnInit {
     private procedimientoService: ProcedimientoService,
     private snackBar: MatSnackBar,
     private programacionService: ProgramacionService,
-    private datePipe: DatePipe,public dialog: MatDialog// Inyectar servicio de programación
-  ) { }
+    private datePipe: DatePipe,public dialog: MatDialog,
+    private citService:CitaService// Inyectar servicio de programación
+  ) { 
+    this.programacion = new Programacion();
+  }
 
   ngOnInit(): void {
+    this.inlineDatePicker = new Date();
     this.getServicios();
   }
 
@@ -75,6 +81,7 @@ export class CitasIndexComponent implements OnInit {
       this.programacionService.buscarPorFechaYProcedimiento(formattedDate, procedimientoId).subscribe(data => {
         this.isLoadingCitas = false; // Finalizar carga de citas
         if (data != null) {
+          this.programacion = data;
           this.calcularCitas(data.horaInicio, data.horaFin, data.tiempoPromedio, data);
         }
         else{
@@ -92,42 +99,113 @@ export class CitasIndexComponent implements OnInit {
 
 
   calcularCitas(fechaInicioStr: string, fechaFinStr: string, tiempoDuracion: number, programacion:any): void {
-    const citas: CitaListado[] = [];
-    const inicio = this.convertToDate(fechaInicioStr);
-    const fin = this.convertToDate(fechaFinStr);
-    while (inicio < fin) {
-      console.log("si entra en el while");
-      const cita = new CitaListado({
-        idPaciente: 'Sin Asignar', // Sin asignar
-        nroCuenta: 'Sin Asignar', // Sin asignar
-        fecha: this.inlineDatePicker,
-        horaInicio: new Date(inicio),
-        horaFin: new Date(inicio.getTime() + programacion.tiempoPromedio * 60000),
-        tiempoPromedio: programacion.tiempoPromedio,
-        fechaRegistro: new Date(),
-        usuarioCreador: programacion.usuarioCreador,
-        esAdicional: false,
-        estado: 'ABIERTO', // Estado inicial
-        medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
-        procedimiento: programacion.procedimiento.nombre,
-        idMedico: programacion.medico.id, // Asignar el ID del médico
-        idProgramacion: programacion.id // Asignar el ID de la programación
-      });
-  
-      citas.push(cita);
-      console.log("citas", citas);
-      inicio.setTime(inicio.getTime() + tiempoDuracion * 60000);
-    }
-  
-    this.citas = citas;
-    console.log("this.cotas", this.citas);
+    const programacionDateStr = this.datePipe.transform(this.inlineDatePicker, 'yyyy-MM-dd')!;
+    this.citService.buscarporId(programacion.id).subscribe(
+      citasExistente => {
+        const citas: CitaListado[] = [];
+       
+        const inicio = this.convertToDate(programacionDateStr, fechaInicioStr);
+        const fin = this.convertToDate(programacionDateStr, fechaFinStr);
+        console.log("inicio",inicio)
+        console.log("fin",fin)
+        console.log("citaexistente",citasExistente)
+        while (inicio < fin) {
+        
+          const horaInicio = new Date(inicio);
+          const horaFin = new Date(inicio);
+          horaFin.setMinutes(horaInicio.getMinutes() + tiempoDuracion);
+
+          console.log("Horainicio", horaInicio);
+          console.log("horaFin", horaFin);
+          const citaExistente = citasExistente.find(cita => {
+            const citaHoraInicio = new Date(`${programacionDateStr}T${cita.horaInicio}`);
+            const citaHoraFin = new Date(`${programacionDateStr}T${cita.horaFin}`);
+
+            // Agregar logs para depurar los valores de citaHoraInicio y citaHoraFin
+            console.log("citaHoraInicio", citaHoraInicio);
+            console.log("citaHoraFin", citaHoraFin);
+
+            return horaInicio.getTime() >= citaHoraInicio.getTime() && horaFin.getTime() <= citaHoraFin.getTime();
+          });
+          if (citaExistente) {
+            citas.push(new CitaListado({
+              idPaciente: citaExistente.idPaciente,
+              nroCuenta: citaExistente.nroCuenta,
+              fecha: this.inlineDatePicker,
+              horaInicio: new Date(`${programacionDateStr}T${citaExistente.horaInicio}`),
+              horaFin: new Date(`${programacionDateStr}T${citaExistente.horaFin}`),
+              tiempoPromedio: programacion.tiempoPromedio,
+              fechaRegistro: new Date(citaExistente.fechaRegistro),
+              usuarioCreador: citaExistente.usuarioCreador,
+              esAdicional: citaExistente.esAdicional,
+              estado: citaExistente.estado,
+              medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
+              procedimiento: programacion.procedimiento.nombre,
+              idMedico: programacion.medico.id,
+              idProgramacion: programacion.id
+            }));
+          } else {
+            citas.push(new CitaListado({
+              idPaciente: 'Sin Asignar', // Sin asignar
+              nroCuenta: 'Sin Asignar', // Sin asignar
+              fecha: this.inlineDatePicker!,
+              horaInicio: new Date(horaInicio),
+              horaFin: new Date(horaFin),
+              tiempoPromedio: programacion.tiempoPromedio,
+              fechaRegistro: new Date(),
+              usuarioCreador: programacion.usuarioCreador,
+              esAdicional: false,
+              estado: 'ABIERTO', // Estado inicial
+              medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
+              procedimiento: programacion.procedimiento.nombre,
+              idMedico: programacion.medico.id,
+              idProgramacion: programacion.id
+            }));
+          }
+
+          inicio.setTime(inicio.getTime() + tiempoDuracion * 60000);
+        }
+        citasExistente.filter(cita => cita.esAdicional).forEach(citaExistente => {
+          const citaHoraInicio = new Date(`${programacionDateStr}T${citaExistente.horaInicio}`);
+            const citaHoraFin = new Date(`${programacionDateStr}T${citaExistente.horaFin}`);
+          citas.push(new CitaListado({
+            idPaciente: citaExistente.idPaciente,
+            nroCuenta: citaExistente.nroCuenta,
+            fecha: citaExistente.fecha,
+            horaInicio: citaHoraInicio,
+            horaFin: citaHoraFin,
+            tiempoPromedio: programacion.tiempoPromedio,
+            fechaRegistro: new Date(citaExistente.fechaRegistro),
+            usuarioCreador: citaExistente.usuarioCreador,
+            esAdicional: citaExistente.esAdicional,
+            estado: citaExistente.estado,
+            medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
+            procedimiento: programacion.procedimiento.nombre,
+            idMedico: programacion.medico.id,
+            idProgramacion: programacion.id
+          }));
+        });
+        this.citas = citas.sort((a, b) => a.horaInicio.getTime() - b.horaInicio.getTime());
+      },
+      error => {
+        // Manejo de errores
+        console.error('Error al buscar citas por programación', error);
+      }
+    );
   }
+
+  formatToHHmm(time: string): string {
+    if (!time) return '';
+    const [hours, minutes] = time.split(':');
+    return `${hours}:${minutes}`;
+  }
+
   
-  convertToDate(timeString: string): Date {
-    const [hours, minutes] = timeString.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-    return date;
+
+  convertToDate(dateString: string, timeString: string): Date {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes, seconds, 0);
   }
   
   formatTime(date: Date): string {
@@ -161,7 +239,45 @@ export class CitasIndexComponent implements OnInit {
       } else {
         console.log('Operación cancelada o sin éxito');
       }
+      this.obtenerProgramacion(this.selectProcedimiento);
     });
   }
-
+  openAdditionalDialog(): void {
+    if (!this.programacion || !this.citas.length) {
+      this.snackBar.open('No hay programación o citas disponibles', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['snack-bar-warning']
+      });
+      return;
+    }
+  
+    // Ordenar las citas por hora de inicio para asegurarnos de obtener la última
+    const sortedCitas = this.citas.sort((a, b) => a.horaFin.getTime() - b.horaFin.getTime());
+    const ultimaCita = sortedCitas[sortedCitas.length - 1];
+  
+    const nuevaHoraInicio = new Date(ultimaCita.horaFin);
+    const nuevaHoraFin = new Date(nuevaHoraInicio);
+    nuevaHoraFin.setMinutes(nuevaHoraInicio.getMinutes() + this.programacion.tiempoPromedio);
+  
+    const citaAdicional = new CitaListado({
+      idPaciente: 'Sin Asignar', // Sin asignar
+      nroCuenta: 'Sin Asignar', // Sin asignar
+      fecha: this.inlineDatePicker!,
+      horaInicio: nuevaHoraInicio,
+      horaFin: nuevaHoraFin,
+      tiempoPromedio: this.programacion.tiempoPromedio,
+      fechaRegistro: new Date(),
+      usuarioCreador: this.programacion.usuarioCreador,
+      esAdicional: true,
+      estado: 'ABIERTO', // Estado inicial
+      medico: `${this.programacion.medico.nombre} ${this.programacion.medico.apellido}`,
+      procedimiento: this.programacion.procedimiento.nombre,
+      idMedico: this.programacion.medico.id,
+      idProgramacion: this.programacion.id
+    });
+  
+    console.log("citaAdicional", citaAdicional);
+    this.openDialog(citaAdicional);
+  }
+  
 }

@@ -44,6 +44,15 @@
     </div>
   </div>
 
+     <!-- Botón de Agregar Programación -->
+     <div class="row animated fadeIn fast">
+      <div class="col-12">
+        <div class="d-flex justify-content-end mb-3" *ngIf="citas.length">
+          <button mat-raised-button color="primary" (click)="openAdditionalDialog()">Agregar Cita Adicional</button>
+        </div>
+      </div>
+    </div>
+
   <!-- Mensaje de cargando -->
   <div class="row animated fadeIn fast" *ngIf="!citas.length && isLoadingCitas">
     <div class="col-12">
@@ -81,6 +90,7 @@
                   <th>Hora Inicio</th>
                   <th>Hora Fin</th>
                   <th>Estado</th>
+                  <th>Adicional</th>
                   <th>Paciente</th>
                   <th>Número de Cuenta</th>
                   <th>Médico</th>
@@ -93,7 +103,25 @@
                   <td>{{ cita.fecha | date: 'MM/dd/yyyy' }}</td>
                   <td>{{ cita.horaInicio | date: 'HH:mm' }}</td>
                   <td>{{ cita.horaFin | date: 'HH:mm' }}</td>
-                  <td>{{ cita.estado }}</td>
+                  <td>
+                    <span class="badge badge-custom"
+                    [ngClass]="{
+                            'badge-custom-success': cita.estado === 'ABIERTO',
+                            'badge-custom-warning': cita.estado === 'PAGADO'
+                          }">
+                      {{ cita.estado }}
+                    </span>
+                  </td>
+                  <td>
+                    <!-- Badge personalizado para 'Es Adicional' -->
+                    <span class="badge badge-custom"
+                      [ngClass]="{
+                        'badge-custom-success': cita.esAdicional,
+                        'badge-custom-danger': !cita.esAdicional
+                      }">
+                      {{ cita.esAdicional ? 'SI' : 'NO' }}
+                    </span>
+                  </td>
                   <td>{{ cita.idPaciente }}</td>
                   <td>{{ cita.nroCuenta }}</td>
                   <td>{{ cita.medico }}</td>
@@ -102,7 +130,7 @@
                     <button mat-icon-button *ngIf="cita.idPaciente !== 'Sin Asignar'">
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="openDialog(cita)">
+                    <button mat-icon-button *ngIf="cita.idPaciente == 'Sin Asignar'"(click)="openDialog(cita)">
                       <mat-icon >add</mat-icon> 
                     </button>
                   </td>

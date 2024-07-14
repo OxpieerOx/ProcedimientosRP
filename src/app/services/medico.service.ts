@@ -51,4 +51,18 @@ export class MedicoService {
     return this.http.get<{ result: boolean, data: Medico }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
+
+
+  buscarMedicoPorServicio(id: number): Observable<Medico[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/servicio/${id}`;
+    return this.http.get<{ result: boolean, data: Medico[] }>(url, httpOptions)
+      .pipe(map(response => response.data));
+  }
 }

@@ -81,12 +81,16 @@ export class CitasAddComponent implements OnInit {
   }
   onAssign(): void {
     if (this.patientFound) {
+      const fechaFormatted = this.formatDate(this.citaData.fecha);
+      const horaInicioFormatted = this.formatTime(this.citaData.horaInicio);
+      const horaFinFormatted = this.formatTime(this.citaData.horaFin);
+
       const citaRequest = new CitaRequestDTO({
         idPaciente: this.patientInfo.IdPaciente,
         nroCuenta: this.assignPatientForm.value.patientSearch,
-        fecha: this.citaData.fecha,
-        horaInicio: this.citaData.horaInicio,
-        horaFin: this.citaData.horaFin,
+        fecha: fechaFormatted,
+        horaInicio: horaInicioFormatted,
+        horaFin: horaFinFormatted,
         idProgramacion: this.citaData.idProgramacion,
         idMedico: this.citaData.idMedico,
         usuarioCreador: this.citaData.usuarioCreador,
@@ -100,7 +104,7 @@ export class CitasAddComponent implements OnInit {
             duration: 5000,
             panelClass: ['snack-bar-success']
           });
-          this.dialogRef.close({ success: true, citaRequest: response });
+          this.dialogRef.close({ success: true, message:'Cita Creada exitosamente.'  });
         },
         error => {
           this.snackBar.open('Error al guardar la cita', 'Cerrar', {
@@ -110,5 +114,25 @@ export class CitasAddComponent implements OnInit {
         }
       );
     }
+  }
+
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = this.padNumber(date.getMonth() + 1); // January is 0!
+    const day = this.padNumber(date.getDate());
+    return `${year}-${month}-${day}`;
+  }
+
+  // Función para formatear la hora en formato HH:MM
+  formatTime(time: Date): string {
+    const hours = this.padNumber(time.getHours());
+    const minutes = this.padNumber(time.getMinutes());
+    return `${hours}:${minutes}`;
+  }
+
+  // Función auxiliar para añadir ceros a la izquierda si es necesario
+  padNumber(num: number): string {
+    return num < 10 ? `0${num}` : `${num}`;
   }
 }

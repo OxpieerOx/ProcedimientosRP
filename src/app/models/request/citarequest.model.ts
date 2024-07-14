@@ -1,9 +1,9 @@
 export class CitaRequestDTO {
   idPaciente: number;
   nroCuenta: string;
-  fecha: Date;
-  horaInicio: Date;
-  horaFin: Date;
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
   idProgramacion: number;
   idMedico: number;
   usuarioCreador: string;
@@ -13,9 +13,10 @@ export class CitaRequestDTO {
   constructor(options?: Partial<CitaRequestDTO>) {
       this.idPaciente = options?.idPaciente || 0;
       this.nroCuenta = options?.nroCuenta || '';
-      this.fecha = options?.fecha ? new Date(options.fecha) : new Date();
-      this.horaInicio = options?.horaInicio ? new Date(options.horaInicio) : new Date();
-      this.horaFin = options?.horaFin ? new Date(options.horaFin) : new Date();
+      this.fecha = options?.fecha ? options.fecha.toString() : '';
+      this.horaInicio = options?.horaInicio ? options.horaInicio.toString() : '';
+      this.horaFin = options?.horaFin ? options.horaFin.toString() : '';
+      
       this.idProgramacion = options?.idProgramacion || 0;
       this.idMedico = options?.idMedico || 0;
       this.usuarioCreador = options?.usuarioCreador || '';
