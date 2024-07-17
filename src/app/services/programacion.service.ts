@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Programacion } from '../models/programacion.model';
 import { ProgramacionRequest } from '../models/request/programacionrequest.model';
+import { ProgramacionFechasRequest } from '../models/request/fecharangerequest.model';
 
 
 @Injectable({
@@ -77,6 +78,21 @@ export class ProgramacionService {
     };
     const url = `${this.urlService}/${id}`;
     return this.http.put<{ result: boolean, data: any }>(url, request, httpOptions)
+      .pipe(map(response => response.data));
+  }
+
+
+
+  crearProgramacionesEnFechas(request: ProgramacionFechasRequest): Observable<Programacion[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/fechas`;
+    return this.http.post<{ result: boolean, data: Programacion[] }>(url, request, httpOptions)
       .pipe(map(response => response.data));
   }
 }
