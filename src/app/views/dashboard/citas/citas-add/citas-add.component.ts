@@ -16,7 +16,6 @@ import { PacienteService } from 'src/app/services/paciente.service';
 })
 export class CitasAddComponent implements OnInit {
 
-
   assignPatientForm: FormGroup;
   patientInfo: Paciente;
   isLoading: boolean = false;
@@ -31,7 +30,7 @@ export class CitasAddComponent implements OnInit {
     private snackBar: MatSnackBar,
     private spinner: NgxSpinnerService,
     private patientService: PacienteService,
-    private citaService:CitaService// Inject your service here
+    private citaService: CitaService
   ) {
     this.patientInfo = new Paciente();
     this.assignPatientForm = this.fb.group({
@@ -39,7 +38,6 @@ export class CitasAddComponent implements OnInit {
     });
     
     this.citaData = data.cita;
-    console.log("data",this.citaData)
   }
 
   ngOnInit(): void {}
@@ -52,18 +50,18 @@ export class CitasAddComponent implements OnInit {
     if (this.assignPatientForm.valid) {
       this.isLoading = true;
       this.searchFailed = false;
-      this.patientFound = false; // Reset patientFound flag
+      this.patientFound = false;
       const searchTerm = this.assignPatientForm.value.patientSearch;
       this.patientService.buscarPacientePorId(searchTerm).subscribe(
         (data) => {
           this.isLoading = false;
           if (data) {
             this.patientInfo = data;
-            this.patientFound = true; // Set patientFound flag to true
+            this.patientFound = true;
           } else {
             this.searchFailed = true;
             this.patientInfo = new Paciente();
-            this.patientFound = false; // Set patientFound flag to false
+            this.patientFound = false;
           }
         },
         (error) => {
@@ -74,11 +72,12 @@ export class CitasAddComponent implements OnInit {
             panelClass: ['snack-bar-warning']
           });
           this.patientInfo = new Paciente();
-          this.patientFound = false; // Set patientFound flag to false
+          this.patientFound = false;
         }
       );
     }
   }
+
   onAssign(): void {
     if (this.patientFound) {
       const fechaFormatted = this.formatDate(this.citaData.fecha);
@@ -95,16 +94,16 @@ export class CitasAddComponent implements OnInit {
         idMedico: this.citaData.idMedico,
         usuarioCreador: this.citaData.usuarioCreador,
         esAdicional: this.citaData.esAdicional,
-        estado: EstadoCita.PAGADO // Estado inicial de la cita
+        estado: EstadoCita.PAGADO
       });
-  
+
       this.citaService.insertarCita(citaRequest).subscribe(
         response => {
           this.snackBar.open('Cita guardada con éxito', 'Cerrar', {
             duration: 5000,
             panelClass: ['snack-bar-success']
           });
-          this.dialogRef.close({ success: true, message:'Cita Creada exitosamente.'  });
+          this.dialogRef.close({ success: true, message: 'Cita Creada exitosamente.' });
         },
         error => {
           this.snackBar.open('Error al guardar la cita', 'Cerrar', {
@@ -116,22 +115,19 @@ export class CitasAddComponent implements OnInit {
     }
   }
 
-
   formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = this.padNumber(date.getMonth() + 1); // January is 0!
+    const month = this.padNumber(date.getMonth() + 1);
     const day = this.padNumber(date.getDate());
     return `${year}-${month}-${day}`;
   }
 
-  // Función para formatear la hora en formato HH:MM
   formatTime(time: Date): string {
     const hours = this.padNumber(time.getHours());
     const minutes = this.padNumber(time.getMinutes());
     return `${hours}:${minutes}`;
   }
 
-  // Función auxiliar para añadir ceros a la izquierda si es necesario
   padNumber(num: number): string {
     return num < 10 ? `0${num}` : `${num}`;
   }

@@ -21,6 +21,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
 import { CitasAddComponent } from './citas/citas-add/citas-add.component';
+import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
+import { ProgramacionFechaComponent } from './programacion/programacion-fecha/programacion-fecha.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +32,12 @@ import { CitasAddComponent } from './citas/citas-add/citas-add.component';
     ProgramacionEditComponent,
     CitasIndexComponent,
     CitasAddComponent,
+    ProgramacionFechaComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    NgxMultipleDatesModule,
     ComponentsModule,
     FormsModule,
     RouterModule,

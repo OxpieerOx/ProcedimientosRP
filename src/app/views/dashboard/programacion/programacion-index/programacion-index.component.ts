@@ -8,6 +8,7 @@ import { ServicioService } from 'src/app/services/servicio.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgramacionEditComponent } from '../programacion-edit/programacion-edit.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProgramacionFechaComponent } from '../programacion-fecha/programacion-fecha.component';
 @Component({
   selector: 'app-programacion-index',
   templateUrl: './programacion-index.component.html',
@@ -79,6 +80,33 @@ export class ProgramacionIndexComponent implements OnInit {
       return; // Salir de la función si no hay procedimiento seleccionado
     }
     const dialogRef = this.dialog.open(ProgramacionEditComponent, {
+      width: '500px',
+      data: { programacionId: programacionId , procedimientoId:procedimientoId, servicioId:servicioId}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        // Mostrar mensaje de éxito si result contiene éxito
+        this.snackBar.open(result.message, 'Cerrar', {
+          duration: 10000,  // Duración del snack bar en milisegundos
+          panelClass: ['snack-bar-success']  // Estilo CSS para el snack bar de éxito
+        });
+      } else {
+        console.log('Operación cancelada o sin éxito');
+      }
+      this.obtenerProgramaciones(this.selectProcedimiento);
+    });
+  }
+
+  openDialogf(programacionId: any,procedimientoId: any,servicioId:any): void {
+    if (!this.selectProcedimiento) {
+      this.snackBar.open('Selecciona un procedimiento primero', 'Cerrar', {
+        duration: 5000,
+        panelClass: ['snack-bar-warning']
+      });
+      return; // Salir de la función si no hay procedimiento seleccionado
+    }
+    const dialogRef = this.dialog.open(ProgramacionFechaComponent, {
       width: '500px',
       data: { programacionId: programacionId , procedimientoId:procedimientoId, servicioId:servicioId}
     });

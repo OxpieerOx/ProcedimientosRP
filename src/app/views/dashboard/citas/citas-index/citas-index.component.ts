@@ -55,6 +55,11 @@ export class CitasIndexComponent implements OnInit {
     });
   }
 
+
+  allCitasPagado(): boolean {
+    return this.citas.every(cita => cita.estado === 'PAGADO');
+  }
+
   onServicioChange(): void {
     this.selectProcedimiento = null;
     this.procedimientos = [];

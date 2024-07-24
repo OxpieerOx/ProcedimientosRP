@@ -48,7 +48,7 @@
      <div class="row animated fadeIn fast">
       <div class="col-12">
         <div class="d-flex justify-content-end mb-3" *ngIf="citas.length">
-          <button mat-raised-button color="primary" (click)="openAdditionalDialog()">Agregar Cita Adicional</button>
+          <button mat-raised-button color="primary" (click)="openAdditionalDialog()" [disabled]="!allCitasPagado()">Agregar Cita Adicional</button>
         </div>
       </div>
     </div>

@@ -1,74 +1,73 @@
 <div class="modal-header">
-    <h5 class="modal-title mr-auto">Asignar Paciente a Cita</h5>
-    <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="assignPatientForm" (ngSubmit)="onSearch()">
-      <div class="form-row">
-        <div class="form-group col-md-10">
-          <label for="patientSearch">Buscar Paciente</label>
-          <input type="text" class="form-control" id="patientSearch" formControlName="patientSearch">
-          <div *ngIf="assignPatientForm.get('patientSearch')?.invalid && (assignPatientForm.get('patientSearch')?.dirty || assignPatientForm.get('patientSearch')?.touched)">
-            <small class="text-danger">Por favor, ingrese un término de búsqueda.</small>
-          </div>
-        </div>
-        <div class="form-group col-md-2 d-flex align-items-end">
-          <button type="submit" class="btn btn-primary">Buscar</button>
+  <h5 class="modal-title mr-auto">Asignar Paciente a Cita</h5>
+  <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="assignPatientForm" (ngSubmit)="onSearch()">
+    <div class="form-row">
+      <div class="form-group col-md-10">
+        <label for="patientSearch">Buscar Paciente</label>
+        <input type="text" class="form-control" id="patientSearch" formControlName="patientSearch">
+        <div *ngIf="assignPatientForm.get('patientSearch')?.invalid && (assignPatientForm.get('patientSearch')?.dirty || assignPatientForm.get('patientSearch')?.touched)">
+          <small class="text-danger">Por favor, ingrese un término de búsqueda.</small>
         </div>
       </div>
-  
-      <div *ngIf="!patientFound && !isLoading" class="alert alert-warning text-center">
-        <h4 class="alert-heading">Busca un paciente</h4>
-        <p class="mb-0">Por favor, ingrese el DNI o el nombre del paciente y haga clic en "Buscar".</p>
+      <div class="form-group col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary">Buscar</button>
       </div>
-  
-      <div *ngIf="isLoading" class="row animated fadeIn fast">
-        <div class="col-12">
-          <div class="alert alert-info text-center">
-            <h4 class="alert-heading">Cargando</h4>
-            <i class="fa fa-spin fa-refresh fa-2x"></i>
-            <p class="mb-0">Por favor espere</p>
-          </div>
+    </div>
+
+    <div *ngIf="!patientFound && !searchFailed && !isLoading" class="alert alert-warning text-center">
+      <h4 class="alert-heading">Busca un paciente</h4>
+      <p class="mb-0">Por favor, ingrese el DNI o el nombre del paciente y haga clic en "Buscar".</p>
+    </div>
+
+    <div *ngIf="isLoading" class="row animated fadeIn fast">
+      <div class="col-12">
+        <div class="alert alert-info text-center">
+          <h4 class="alert-heading">Cargando</h4>
+          <i class="fa fa-spin fa-refresh fa-2x"></i>
+          <p class="mb-0">Por favor espere</p>
         </div>
       </div>
-  
-      <div *ngIf="searchFailed && !isLoading" class="row animated fadeIn fast">
-        <div class="col-12">
-          <div class="alert alert-warning text-center">
-            <h4 class="alert-heading">Paciente no encontrado</h4>
-            <p class="mb-0">No se encontró ningún paciente con el término de búsqueda proporcionado.</p>
-          </div>
+    </div>
+
+    <div *ngIf="searchFailed && !isLoading" class="row animated fadeIn fast">
+      <div class="col-12">
+        <div class="alert alert-warning text-center">
+          <h4 class="alert-heading">Paciente no encontrado</h4>
+          <p class="mb-0">No se encontró ningún paciente con el término de búsqueda proporcionado.</p>
         </div>
       </div>
-  
-      <div *ngIf="patientFound && !isLoading" class="patient-info-box mt-3 p-3 border rounded">
-        <table class="table table-sm">
-          <tbody>
-            <tr>
-              <td><strong>Nombre Completo:</strong></td>
-              <td>{{ patientInfo.Paciente }}</td>
-            </tr>
-            <tr>
-              <td><strong>Historia Clínica:</strong></td>
-              <td>{{ patientInfo.HistoriaClinica }}</td>
-            </tr>
-            <tr>
-              <td><strong>DNI:</strong></td>
-              <td>{{ patientInfo.DNI }}</td>
-            </tr>
-            <tr>
-              <td><strong>Financiamiento:</strong></td>
-              <td>{{ patientInfo.Financiamiento }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="onAssign()" [disabled]="!patientFound">Asignar</button>
-  </div>
-  
+    </div>
+
+    <div *ngIf="patientFound && !isLoading" class="patient-info-box mt-3 p-3 border rounded">
+      <table class="table table-sm">
+        <tbody>
+          <tr>
+            <td><strong>Nombre Completo:</strong></td>
+            <td>{{ patientInfo.Paciente }}</td>
+          </tr>
+          <tr>
+            <td><strong>Historia Clínica:</strong></td>
+            <td>{{ patientInfo.HistoriaClinica }}</td>
+          </tr>
+          <tr>
+            <td><strong>DNI:</strong></td>
+            <td>{{ patientInfo.DNI }}</td>
+          </tr>
+          <tr>
+            <td><strong>Financiamiento:</strong></td>
+            <td>{{ patientInfo.Financiamiento }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+  <button type="button" class="btn btn-primary" (click)="onAssign()" [disabled]="!patientFound">Asignar</button>
+</div>

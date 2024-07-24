@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <h5 class="modal-title mr-auto">{{ modalTitle }}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="programacionForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group col-md-12"> <!-- Cambio aquí -->
+          <label for="fecha">Fechas</label>
+          <mat-form-field class="w-100">
+            <ngx-multiple-dates [matDatepicker]="pickerSimple" placeholder="Seleccionar fechas"
+                            
+                                formControlName="fecha" id="fecha"
+                                (remove)="dateRemoved($event)">
+            </ngx-multiple-dates>
+            <mat-datepicker-toggle matSuffix [for]="pickerSimple">
+              <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker #pickerSimple></mat-datepicker>
+          </mat-form-field>
+          
+          <div *ngIf="programacionForm.get('fecha')?.invalid && (programacionForm.get('fecha')?.dirty || programacionForm.get('fecha')?.touched)">
+            <small class="text-danger">Las fechas son requeridas.</small>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="horaInicio">Hora Inicio</label>
+          <input type="text" class="form-control" id="horaInicio" formControlName="horaInicio">
+          <div *ngIf="programacionForm.get('horaInicio')?.invalid && (programacionForm.get('horaInicio')?.dirty || programacionForm.get('horaInicio')?.touched)">
+            <small class="text-danger">La hora de inicio es requerida.</small>
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="horaFin">Hora Fin</label>
+          <input type="text" class="form-control" id="horaFin" formControlName="horaFin">
+          <div *ngIf="programacionForm.get('horaFin')?.invalid && (programacionForm.get('horaFin')?.dirty || programacionForm.get('horaFin')?.touched)">
+            <small class="text-danger">La hora de fin es requerida.</small>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="tiempoPromedio">Tiempo Promedio</label>
+          <input type="text" class="form-control" id="tiempoPromedio" formControlName="tiempoPromedio">
+          <div *ngIf="programacionForm.get('tiempoPromedio')?.invalid && (programacionForm.get('tiempoPromedio')?.dirty || programacionForm.get('tiempoPromedio')?.touched)">
+            <small class="text-danger" *ngIf="programacionForm.get('tiempoPromedio')?.errors?.['required']">El tiempo promedio es requerido.</small>
+            <small class="text-danger" *ngIf="programacionForm.get('tiempoPromedio')?.errors?.['pattern']">El tiempo promedio debe ser un número.</small>
+          </div>
+        </div>
+  
+        <div class="form-group col-md-6">
+          <label for="medico">Médico</label>
+          <select class="form-control" id="medico" formControlName="medicoid">
+            <option *ngFor="let medico of medicos" [ngValue]="medico.id">{{ medico.nombre }}</option>
+          </select>
+          <div *ngIf="programacionForm.get('medico')?.invalid && (programacionForm.get('medico')?.dirty || programacionForm.get('medico')?.touched)">
+            <small class="text-danger">El médico es requerido.</small>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" (click)="onSubmit()" [disabled]="programacionForm.invalid">Guardar</button>
+  </div>
+  
