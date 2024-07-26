@@ -11,7 +11,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { FlatpickrModule } from 'angularx-flatpickr';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,

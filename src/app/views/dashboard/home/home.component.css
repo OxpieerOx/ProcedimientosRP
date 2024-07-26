@@ -1,13 +1,47 @@
-.dashboard {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .card {
-    flex: 1 1 200px;
-    max-width: 300px;
-    text-align: center;
-  }
-  
+/* home.component.css */
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cards-container {
+  display: flex;
+  gap: 20px; /* Espacio entre las tarjetas */
+  overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 200px; /* Ancho fijo para las tarjetas */
+  flex: 0 0 auto; /* Evita que las tarjetas se estiren */
+}
+
+.card h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.chart-container {
+  width: 100%; /* Ocupa todo el ancho disponible */
+  max-width: 800px; /* Ajusta el máximo ancho del gráfico */
+  margin: 0 auto; /* Centra el gráfico */
+}
+
+canvas {
+  width: 100% !important; /* Asegura que el gráfico ocupe el 100% del contenedor */
+  height: 400px; /* Ajusta la altura del gráfico según tus necesidades */
+}

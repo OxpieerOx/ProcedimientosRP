@@ -1,0 +1,18 @@
+<!-- home.component.html -->
+<div class="container">
+    <!-- Tarjetas con información -->
+    <div class="cards-container">
+      <div class="card" *ngFor="let procedimiento of procedimientos">
+        <div class="card-content">
+          <h4>{{ citasProcedimientos[procedimiento] }} Citas</h4>
+          <p>{{ procedimiento }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Gráfico -->
+    <div class="chart-container">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+  
