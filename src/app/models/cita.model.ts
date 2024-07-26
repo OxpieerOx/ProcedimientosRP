@@ -6,7 +6,7 @@ export class Cita {
   idPaciente: string;
   nroCuenta: string;
   fecha: Date;
-  horaInicio: Date;
+  horaInicio: string;
   horaFin: Date;
   programacion: Programacion;
   medico: Medico;
@@ -20,7 +20,7 @@ export class Cita {
     this.idPaciente = options?.idPaciente || '';
     this.nroCuenta = options?.nroCuenta || '';
     this.fecha = options?.fecha ? new Date(options.fecha) : new Date();
-    this.horaInicio = options?.horaInicio ? new Date(options.horaInicio) : new Date();
+    this.horaInicio = options?.horaInicio || '';
     this.horaFin = options?.horaFin ? new Date(options.horaFin) : new Date();
     this.programacion = new Programacion(options?.programacion);
     this.medico = new Medico(options?.medico)

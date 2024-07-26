@@ -40,4 +40,17 @@ export class CitaService {
     return this.http.get<{ result: boolean, data: Cita[] }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
+
+  updateCita(id: number, citaRequest: CitaRequestDTO): Observable<Cita> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/${id}`;
+    return this.http.put<{ result: boolean, data: Cita }>(url, citaRequest, httpOptions)
+      .pipe(map(response => response.data));
+  }
 }

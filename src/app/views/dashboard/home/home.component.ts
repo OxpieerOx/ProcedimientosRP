@@ -7,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  totalCitas: number = 42; // Ejemplo de datos dinámicos
+  citasPendientes: number = 15;
+  citasAtendidas: number = 27;
+
+  // Datos para el gráfico
+  citasPorEstado = [this.citasPendientes, this.citasAtendidas];
+
   constructor() { }
 
   ngOnInit(): void {

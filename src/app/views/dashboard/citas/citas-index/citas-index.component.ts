@@ -11,6 +11,8 @@ import { ProgramacionService } from 'src/app/services/programacion.service';
 import { ServicioService } from 'src/app/services/servicio.service';
 import { CitasAddComponent } from '../citas-add/citas-add.component';
 import { CitaService } from 'src/app/services/cita.service';
+import { CitaEditComponent } from '../cita-edit/cita-edit.component';
+import { EstadoCita } from 'src/app/models/request/citarequest.model';
 
 @Component({
   selector: 'app-citas-index',
@@ -76,6 +78,8 @@ export class CitasIndexComponent implements OnInit {
     });
   }
 
+  
+
   onProcedimientoChange(): void {
     this.obtenerProgramacion(this.selectProcedimiento);
   }
@@ -134,9 +138,10 @@ export class CitasIndexComponent implements OnInit {
           });
           if (citaExistente) {
             citas.push(new CitaListado({
+              id: citaExistente.id,
               idPaciente: citaExistente.idPaciente,
               nroCuenta: citaExistente.nroCuenta,
-              fecha: this.inlineDatePicker,
+              fecha: citaExistente.fecha,
               horaInicio: new Date(`${programacionDateStr}T${citaExistente.horaInicio}`),
               horaFin: new Date(`${programacionDateStr}T${citaExistente.horaFin}`),
               tiempoPromedio: programacion.tiempoPromedio,
@@ -183,7 +188,7 @@ export class CitasIndexComponent implements OnInit {
             fechaRegistro: new Date(citaExistente.fechaRegistro),
             usuarioCreador: citaExistente.usuarioCreador,
             esAdicional: citaExistente.esAdicional,
-            estado: citaExistente.estado,
+            estado: EstadoCita.PAGADO,
             medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
             procedimiento: programacion.procedimiento.nombre,
             idMedico: programacion.medico.id,
@@ -218,6 +223,28 @@ export class CitasIndexComponent implements OnInit {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   }
+
+
+  openDialogedit(cita: CitaListado): void {
+    console.log("cita",cita)
+    const dialogRef = this.dialog.open(CitaEditComponent, {
+      width: '500px',
+      data: { cita: cita, idProcedimiento : this.selectProcedimiento } // Pasar el objeto cita como dato
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        // Mostrar mensaje de éxito si result contiene éxito
+        this.snackBar.open(result.message, 'Cerrar', {
+          duration: 10000,  // Duración del snack bar en milisegundos
+          panelClass: ['snack-bar-success']  // Estilo CSS para el snack bar de éxito
+        });
+      } else {
+        console.log('Operación cancelada o sin éxito');
+      }
+      this.obtenerProgramacion(this.selectProcedimiento);
+    });
+  }
   
  
   openDialog(cita: CitaListado): void {
@@ -247,6 +274,7 @@ export class CitasIndexComponent implements OnInit {
       this.obtenerProgramacion(this.selectProcedimiento);
     });
   }
+
   openAdditionalDialog(): void {
     if (!this.programacion || !this.citas.length) {
       this.snackBar.open('No hay programación o citas disponibles', 'Cerrar', {

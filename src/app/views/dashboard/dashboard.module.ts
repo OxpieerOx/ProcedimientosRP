@@ -23,6 +23,7 @@ import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
 import { CitasAddComponent } from './citas/citas-add/citas-add.component';
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { ProgramacionFechaComponent } from './programacion/programacion-fecha/programacion-fecha.component';
+import { CitaEditComponent } from './citas/cita-edit/cita-edit.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ProgramacionFechaComponent } from './programacion/programacion-fecha/pr
     CitasIndexComponent,
     CitasAddComponent,
     ProgramacionFechaComponent,
+    CitaEditComponent,
   ],
   imports: [
     CommonModule,

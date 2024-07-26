@@ -127,7 +127,7 @@
                   <td>{{ cita.medico }}</td>
                   <td>{{ cita.procedimiento }}</td>
                   <td>
-                    <button mat-icon-button *ngIf="cita.idPaciente !== 'Sin Asignar'">
+                    <button mat-icon-button  *ngIf="cita.idPaciente !== 'Sin Asignar'" (click)="openDialogedit(cita)"  >
                       <mat-icon>edit</mat-icon>
                     </button>
                     <button mat-icon-button *ngIf="cita.idPaciente == 'Sin Asignar'"(click)="openDialog(cita)">

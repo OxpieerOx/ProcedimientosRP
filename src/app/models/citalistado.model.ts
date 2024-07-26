@@ -1,4 +1,5 @@
 export class CitaListado {
+    id:number;
     idPaciente: string;
     nroCuenta: string;
     fecha: Date;
@@ -15,6 +16,7 @@ export class CitaListado {
     idProgramacion: number; // Nuevo campo para almacenar el ID de la programación
   
     constructor(options?: Partial<CitaListado>) {
+      this.id = options?.id || 0;
       this.idPaciente = options?.idPaciente || '';
       this.nroCuenta = options?.nroCuenta || '';
       this.fecha = options?.fecha ? new Date(options.fecha) : new Date();

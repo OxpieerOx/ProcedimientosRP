@@ -13,7 +13,7 @@ export class SidebarService {
     {
       titulo: 'Home',
       icono: 'mdi mdi-home',
-      url: '/'
+      url: 'home'
     },
     {
       titulo: 'Programacion',
