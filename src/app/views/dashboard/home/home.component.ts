@@ -1,40 +1,47 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { ProcedimientoCitas } from 'src/app/models/procedimientocitas.model';
+import { ProcedimientoService } from 'src/app/services/procedimiento.service';
+import { ProgramacionService } from 'src/app/services/programacion.service';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
 
-  // Ejemplo de datos dinámicos para cada procedimiento
-  citasProcedimientos: { [key: string]: number } = {
-    'Procedimiento 1': 15,
-    'Procedimiento 2': 8,
-    'Procedimiento 3': 20,
-    'Procedimiento 4': 5,
-    'Procedimiento 5': 12
-  };
-
-  // Datos para el gráfico
-  procedimientos = Object.keys(this.citasProcedimientos);
-  citas = Object.values(this.citasProcedimientos);
+  citasProcedimientos: { [key: string]: number } = {};
+  procedimientos: string[] = [];
+  citas: number[] = [];
   chart: any;
 
-  constructor() { }
+  constructor(private programacionService: ProcedimientoService) { }
 
   ngOnInit(): void {
     Chart.register(...registerables);
+    this.getCitasByProcedimiento();
   }
 
-  ngAfterViewInit(): void {
-    this.createChart();
+  getCitasByProcedimiento(): void {
+    this.programacionService.getCitasCountByProcedimiento().subscribe((data: ProcedimientoCitas[]) => {
+      this.citasProcedimientos = {};
+      data.forEach(item => {
+        this.citasProcedimientos[item.nombreProcedimiento] = item.totalCitas;
+      });
+      this.procedimientos = Object.keys(this.citasProcedimientos);
+      this.citas = Object.values(this.citasProcedimientos);
+      this.createChart();
+    });
   }
 
   createChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
     this.chart = new Chart('myChart', {
-      type: 'bar', // Tipo de gráfico
+      type: 'bar',
       data: {
         labels: this.procedimientos,
         datasets: [{
@@ -58,7 +65,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 if (label) {
                   label += ': ';
                 }
-                // Asegúrate de que `context.parsed.y` sea un número
                 if (typeof context.parsed.y === 'number') {
                   label += context.parsed.y.toFixed(0);
                 }

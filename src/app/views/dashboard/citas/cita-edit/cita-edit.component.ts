@@ -33,14 +33,18 @@ export class CitaEditComponent implements OnInit {
     this.programacionSelecionada = new Programacion();
     this.editCitaForm = this.fb.group({
       programacion: ['', Validators.required],
-      hora: ['', Validators.required]
+      hora: [{ value: '', disabled: true }, Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.fetchProgramaciones();
     this.editCitaForm.get('programacion')?.valueChanges.subscribe(programacionId => {
-      this.fetchHoras(programacionId);
+      if (programacionId) {
+        this.fetchHoras(programacionId);
+      } else {
+        this.resetHoraField();
+      }
     });
   }
 
@@ -51,6 +55,8 @@ export class CitaEditComponent implements OnInit {
   }
 
   fetchHoras(programacionId: number): void {
+    this.resetHoraField();
+
     this.programacionService.buscarPorId(programacionId).subscribe(programacion => {
       const { horaInicio, horaFin, tiempoPromedio } = programacion;
       this.horas = this.generateHoras(horaInicio, horaFin, tiempoPromedio);
@@ -88,15 +94,25 @@ export class CitaEditComponent implements OnInit {
   filterHorasDisponibles(programacionId: number): void {
     this.citaService.buscarporId(programacionId).subscribe(citas => {
       const horasOcupadas = citas
-        .filter(cita => cita.estado === 'PAGADO')  // Filtrar citas por estado 'PAGADO'
+        .filter(cita => cita.estado === 'PAGADO')
         .map(cita => this.convertirHora(cita.horaInicio).getTime());
-      
+  
       this.horasDisponibles = this.horas.filter(hora => {
         const [start, end] = hora.split(' - ');
         const startTime = this.convertirHora(start).getTime();
         const endTime = this.convertirHora(end).getTime();
         return !horasOcupadas.some(o => o >= startTime && o < endTime);
       });
+
+      if (this.horasDisponibles.length > 0) {
+        this.editCitaForm.get('hora')?.enable();
+      } else {
+        this.snackBar.open('No hay cupos disponibles para esa programación', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['snack-bar-warning']
+        });
+        this.editCitaForm.get('hora')?.disable();
+      }
     });
   }
 
@@ -107,44 +123,44 @@ export class CitaEditComponent implements OnInit {
     return date;
   }
 
+  resetHoraField(): void {
+    this.editCitaForm.get('hora')?.setValue('');
+    this.editCitaForm.get('hora')?.markAsUntouched();
+    this.editCitaForm.get('hora')?.updateValueAndValidity();
+    this.editCitaForm.get('hora')?.disable();
+    this.horasDisponibles = [];
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
+
   formatToHHmm(time: string): string {
     if (!time) return '';
     const [hours, minutes] = time.split(':');
     return `${hours}:${minutes}`;
   }
 
-
   onSave(): void {
     if (this.editCitaForm.valid) {
-     
       const formValues = this.editCitaForm.value;
       this.programacionSelecionada = this.programaciones.find(p => p.id === formValues.programacion)!;
 
-      const horaInicio = formValues.hora.split(' - ')[0];
-      const horaFin = formValues.hora.split(' - ')[1];
-      console.log("formatdate",this.programacionSelecionada.fecha)
-      
-     
-  
+      const [horaInicio, horaFin] = formValues.hora.split(' - ');
 
-      
- 
       const citaRequest = new CitaRequestDTO({
         idPaciente: this.data.cita.idPaciente,
-        nroCuenta: this.data.cita.nroCuenta, // Asegúrate de obtener esto correctamente
-        fecha: this.programacionSelecionada.fecha+ 'T00:00:00',
-        horaInicio: horaInicio,
-        horaFin: horaFin,
+        nroCuenta: this.data.cita.nroCuenta, 
+        fecha: `${this.programacionSelecionada.fecha}T00:00:00`,
+        horaInicio,
+        horaFin,
         idProgramacion: formValues.programacion,
         idMedico: this.data.cita.idMedico,
         usuarioCreador: this.data.cita.usuarioCreador,
         esAdicional: this.data.cita.esAdicional,
         estado: this.data.cita.estado
       });
-      console.log(citaRequest)
+
       this.citaService.updateCita(this.data.cita.id, citaRequest).subscribe(
         response => {
           this.snackBar.open('Cita actualizada con éxito', 'Cerrar', {
@@ -162,27 +178,11 @@ export class CitaEditComponent implements OnInit {
       );
     }
   }
+
   formatDate(date: Date): string {
     const year = date.getFullYear();
-    const month = this.padNumber(date.getMonth() + 1);
-    const day = this.padNumber(date.getDate());
+    const month = this.padZero(date.getMonth() + 1);
+    const day = this.padZero(date.getDate());
     return `${year}-${month}-${day}`;
   }
-
-  
-  padNumber(num: number): string {
-    return num < 10 ? `0${num}` : `${num}`;
-  }
-
- private formatDateToString(date: Date): string {
-  // Ajusta la fecha para que esté en la zona horaria local
-  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-
-  // Obtener el año, mes y día
-  const year = localDate.getFullYear();
-  const month = this.padZero(localDate.getMonth() + 1); // Los meses en JavaScript van de 0 a 11
-  const day = this.padZero(localDate.getDate());
-
-  return `${year}-${month}-${day}`;
-}
 }

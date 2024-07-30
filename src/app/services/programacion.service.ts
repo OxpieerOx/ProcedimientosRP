@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Programacion } from '../models/programacion.model';
 import { ProgramacionRequest } from '../models/request/programacionrequest.model';
 import { ProgramacionFechasRequest } from '../models/request/fecharangerequest.model';
+import { ProcedimientoCitas } from '../models/procedimientocitas.model';
 
 
 @Injectable({
@@ -95,4 +96,6 @@ export class ProgramacionService {
     return this.http.post<{ result: boolean, data: Programacion[] }>(url, request, httpOptions)
       .pipe(map(response => response.data));
   }
+
+
 }

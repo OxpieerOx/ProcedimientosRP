@@ -1,39 +1,42 @@
 <div class="modal-header">
-    <h5 class="modal-title mr-auto">Editar Cita</h5>
-    <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="editCitaForm" (ngSubmit)="onSave()">
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label for="programacion">Programación</label>
-          <select class="form-control" id="programacion" formControlName="programacion">
-            <option *ngFor="let programacion of programaciones" [ngValue]="programacion.id">
-              {{ programacion.fecha }} - {{ programacion.medico.nombre }} {{ programacion.medico.apellido }}
-            </option>
-          </select>
-          <div *ngIf="editCitaForm.get('programacion')?.invalid && (editCitaForm.get('programacion')?.dirty || editCitaForm.get('programacion')?.touched)">
-            <small class="text-danger">La programación es requerida.</small>
-          </div>
+  <h5 class="modal-title mr-auto">Editar Cita</h5>
+  <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="editCitaForm" (ngSubmit)="onSave()">
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="programacion">Programación</label>
+        <select class="form-control" id="programacion" formControlName="programacion">
+          <option *ngFor="let programacion of programaciones" [ngValue]="programacion.id">
+            {{ programacion.fecha }} - {{ programacion.medico.nombre }} {{ programacion.medico.apellido }}
+          </option>
+        </select>
+        <div *ngIf="editCitaForm.get('programacion')?.invalid && (editCitaForm.get('programacion')?.dirty || editCitaForm.get('programacion')?.touched)">
+          <small class="text-danger">La programación es requerida.</small>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-12">
-          <label for="hora">Hora</label>
-          <select class="form-control" id="hora" formControlName="hora" [disabled]="!editCitaForm.get('programacion')?.value">
-            <option *ngFor="let hora of horasDisponibles" [ngValue]="hora">{{ hora }}</option>
-          </select>
-          <div *ngIf="editCitaForm.get('hora')?.invalid && (editCitaForm.get('hora')?.dirty || editCitaForm.get('hora')?.touched)">
-            <small class="text-danger">La hora es requerida.</small>
-          </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="hora">Hora</label>
+        <select class="form-control" id="hora" formControlName="hora" [disabled]="editCitaForm.get('hora')?.disabled ?? true">
+          <option *ngFor="let hora of horasDisponibles" [ngValue]="hora">
+            {{ hora }}
+          </option>
+        </select>
+        <div *ngIf="editCitaForm.get('hora')?.invalid && (editCitaForm.get('hora')?.dirty || editCitaForm.get('hora')?.touched)">
+          <small class="text-danger">La hora es requerida.</small>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 text-right">
+        <button type="button" class="btn btn-secondary mr-2" (click)="onNoClick()">Cancelar</button>
         <button type="submit" class="btn btn-primary" [disabled]="editCitaForm.invalid">Guardar</button>
       </div>
-    </form>
-  </div>
-  
+    </div>
+  </form>
+</div>
