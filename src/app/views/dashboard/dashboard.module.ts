@@ -24,6 +24,8 @@ import { CitasAddComponent } from './citas/citas-add/citas-add.component';
 import { NgxMultipleDatesModule } from 'ngx-multiple-dates';
 import { ProgramacionFechaComponent } from './programacion/programacion-fecha/programacion-fecha.component';
 import { CitaEditComponent } from './citas/cita-edit/cita-edit.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { CitaEditComponent } from './citas/cita-edit/cita-edit.component';
   ],
   imports: [
     CommonModule,
+    MatPaginatorModule,
+    MatTableModule,
     DashboardRoutingModule,
     NgxMultipleDatesModule,
     ComponentsModule,

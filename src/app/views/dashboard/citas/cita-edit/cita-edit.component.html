@@ -7,20 +7,20 @@
 <div class="modal-body">
   <form [formGroup]="editCitaForm" (ngSubmit)="onSave()">
     <div class="form-row">
-      <div class="form-group col-md-12">
-        <label for="programacion">Programación</label>
-        <select class="form-control" id="programacion" formControlName="programacion">
-          <option *ngFor="let programacion of programaciones" [ngValue]="programacion.id">
-            {{ programacion.fecha }} - {{ programacion.medico.nombre }} {{ programacion.medico.apellido }}
-          </option>
-        </select>
-        <div *ngIf="editCitaForm.get('programacion')?.invalid && (editCitaForm.get('programacion')?.dirty || editCitaForm.get('programacion')?.touched)">
-          <small class="text-danger">La programación es requerida.</small>
+      <div class="form-group col-md-6">
+        <label for="fecha">Fecha</label>
+        <mat-form-field class="w-100">
+          <input matInput [matDatepicker]="picker" formControlName="fecha" id="fecha">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div *ngIf="editCitaForm.get('fecha')?.invalid && (editCitaForm.get('fecha')?.dirty || editCitaForm.get('fecha')?.touched)">
+          <small class="text-danger">La fecha es requerida o no hay programación disponible.</small>
         </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-6">
         <label for="hora">Hora</label>
         <select class="form-control" id="hora" formControlName="hora" [disabled]="editCitaForm.get('hora')?.disabled ?? true">
           <option *ngFor="let hora of horasDisponibles" [ngValue]="hora">

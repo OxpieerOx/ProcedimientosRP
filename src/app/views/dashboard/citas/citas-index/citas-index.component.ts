@@ -124,15 +124,12 @@ export class CitasIndexComponent implements OnInit {
           const horaFin = new Date(inicio);
           horaFin.setMinutes(horaInicio.getMinutes() + tiempoDuracion);
 
-          console.log("Horainicio", horaInicio);
-          console.log("horaFin", horaFin);
           const citaExistente = citasExistente.find(cita => {
             const citaHoraInicio = new Date(`${programacionDateStr}T${cita.horaInicio}`);
             const citaHoraFin = new Date(`${programacionDateStr}T${cita.horaFin}`);
 
             // Agregar logs para depurar los valores de citaHoraInicio y citaHoraFin
-            console.log("citaHoraInicio", citaHoraInicio);
-            console.log("citaHoraFin", citaHoraFin);
+       
 
             return horaInicio.getTime() >= citaHoraInicio.getTime() && horaFin.getTime() <= citaHoraFin.getTime();
           });

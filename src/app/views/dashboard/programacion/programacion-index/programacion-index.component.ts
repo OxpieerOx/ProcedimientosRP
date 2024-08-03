@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewEncapsulation  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Procedimiento } from 'src/app/models/procedimiento.model';
 import { Programacion } from 'src/app/models/programacion.model';
 import { Servicio } from 'src/app/models/servicio.model';
@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProgramacionEditComponent } from '../programacion-edit/programacion-edit.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProgramacionFechaComponent } from '../programacion-fecha/programacion-fecha.component';
+
 @Component({
   selector: 'app-programacion-index',
   templateUrl: './programacion-index.component.html',
@@ -18,13 +19,18 @@ export class ProgramacionIndexComponent implements OnInit {
   servicios: Servicio[] = [];
   procedimientos: Procedimiento[] = [];
   programaciones: Programacion[] = [];
+  paginatedProgramaciones: Programacion[] = []; // Data to be shown in the current page
   selectServicio: any;
   isLoadingProgramaciones: boolean = false;
   selectProcedimiento: any;
 
-  constructor(private servicioService: ServicioService, private procedimientoService:ProcedimientoService,
-    private programacionService : ProgramacionService,public dialog: MatDialog,  private snackBar: MatSnackBar,
-  ) { }
+  // Paginator variables
+  pageSize = 10; // Number of items per page
+  currentPage = 1; // Current page
+  totalPages = 1; // Total pages
+
+  constructor(private servicioService: ServicioService, private procedimientoService: ProcedimientoService,
+              private programacionService: ProgramacionService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getServicios();
@@ -49,7 +55,6 @@ export class ProgramacionIndexComponent implements OnInit {
   obtenerProcedimientos(servicioId: number): void {
     this.procedimientoService.obtenerProcedimientosPorServicio(servicioId).subscribe(data => {
       this.procedimientos = data;
-      
       if (this.procedimientos.length > 0) {
         this.selectProcedimiento = this.procedimientos[0].id; // Seleccionar el primer procedimiento
         this.obtenerProgramaciones(this.selectProcedimiento); // Obtener programaciones para el primer procedimiento
@@ -66,12 +71,38 @@ export class ProgramacionIndexComponent implements OnInit {
     this.programacionService.buscarPorProcedimiento(procedimientoId).subscribe(data => {
       this.programaciones = data;
       this.isLoadingProgramaciones = false; // Finalizar carga de programaciones
+      this.updatePagination(); // Update pagination data
     }, error => {
       this.isLoadingProgramaciones = false; // Manejo de errores: finalizar carga en caso de error
     });
   }
 
-  openDialog(programacionId: any,procedimientoId: any,servicioId:any): void {
+  updatePagination(): void {
+    this.totalPages = Math.ceil(this.programaciones.length / this.pageSize);
+    this.paginateData();
+  }
+
+  paginateData(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedProgramaciones = this.programaciones.slice(startIndex, endIndex);
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateData();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateData();
+    }
+  }
+
+  openDialog(programacionId: any, procedimientoId: any, servicioId: any): void {
     if (!this.selectProcedimiento) {
       this.snackBar.open('Selecciona un procedimiento primero', 'Cerrar', {
         duration: 5000,
@@ -81,7 +112,7 @@ export class ProgramacionIndexComponent implements OnInit {
     }
     const dialogRef = this.dialog.open(ProgramacionEditComponent, {
       width: '500px',
-      data: { programacionId: programacionId , procedimientoId:procedimientoId, servicioId:servicioId}
+      data: { programacionId: programacionId, procedimientoId: procedimientoId, servicioId: servicioId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -98,7 +129,7 @@ export class ProgramacionIndexComponent implements OnInit {
     });
   }
 
-  openDialogf(programacionId: any,procedimientoId: any,servicioId:any): void {
+  openDialogf(programacionId: any, procedimientoId: any, servicioId: any): void {
     if (!this.selectProcedimiento) {
       this.snackBar.open('Selecciona un procedimiento primero', 'Cerrar', {
         duration: 5000,
@@ -108,7 +139,7 @@ export class ProgramacionIndexComponent implements OnInit {
     }
     const dialogRef = this.dialog.open(ProgramacionFechaComponent, {
       width: '500px',
-      data: { programacionId: programacionId , procedimientoId:procedimientoId, servicioId:servicioId}
+      data: { programacionId: programacionId, procedimientoId: procedimientoId, servicioId: servicioId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
