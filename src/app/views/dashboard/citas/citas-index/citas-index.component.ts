@@ -107,32 +107,25 @@ export class CitasIndexComponent implements OnInit {
   }
 
 
-  calcularCitas(fechaInicioStr: string, fechaFinStr: string, tiempoDuracion: number, programacion:any): void {
+  calcularCitas(fechaInicioStr: string, fechaFinStr: string, tiempoDuracion: number, programacion: any): void {
     const programacionDateStr = this.datePipe.transform(this.inlineDatePicker, 'yyyy-MM-dd')!;
     this.citService.buscarporId(programacion.id).subscribe(
       citasExistente => {
         const citas: CitaListado[] = [];
-       
         const inicio = this.convertToDate(programacionDateStr, fechaInicioStr);
         const fin = this.convertToDate(programacionDateStr, fechaFinStr);
-        console.log("inicio",inicio)
-        console.log("fin",fin)
-        console.log("citaexistente",citasExistente)
+  
         while (inicio < fin) {
-        
           const horaInicio = new Date(inicio);
           const horaFin = new Date(inicio);
           horaFin.setMinutes(horaInicio.getMinutes() + tiempoDuracion);
-
+  
           const citaExistente = citasExistente.find(cita => {
             const citaHoraInicio = new Date(`${programacionDateStr}T${cita.horaInicio}`);
             const citaHoraFin = new Date(`${programacionDateStr}T${cita.horaFin}`);
-
-            // Agregar logs para depurar los valores de citaHoraInicio y citaHoraFin
-       
-
             return horaInicio.getTime() >= citaHoraInicio.getTime() && horaFin.getTime() <= citaHoraFin.getTime();
           });
+  
           if (citaExistente) {
             citas.push(new CitaListado({
               id: citaExistente.id,
@@ -149,12 +142,13 @@ export class CitasIndexComponent implements OnInit {
               medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
               procedimiento: programacion.procedimiento.nombre,
               idMedico: programacion.medico.id,
-              idProgramacion: programacion.id
+              idProgramacion: programacion.id,
+              financiamiento: citaExistente.financiamiento // Asigna el valor
             }));
           } else {
             citas.push(new CitaListado({
-              idPaciente: 'Sin Asignar', // Sin asignar
-              nroCuenta: 'Sin Asignar', // Sin asignar
+              idPaciente: 'Sin Asignar',
+              nroCuenta: 'Sin Asignar',
               fecha: this.inlineDatePicker!,
               horaInicio: new Date(horaInicio),
               horaFin: new Date(horaFin),
@@ -162,19 +156,21 @@ export class CitasIndexComponent implements OnInit {
               fechaRegistro: new Date(),
               usuarioCreador: programacion.usuarioCreador,
               esAdicional: false,
-              estado: 'ABIERTO', // Estado inicial
+              estado: 'ABIERTO',
               medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
               procedimiento: programacion.procedimiento.nombre,
               idMedico: programacion.medico.id,
-              idProgramacion: programacion.id
+              idProgramacion: programacion.id,
+              financiamiento: 'Sin Asignar' // Asigna un valor predeterminado
             }));
           }
-
+  
           inicio.setTime(inicio.getTime() + tiempoDuracion * 60000);
         }
+  
         citasExistente.filter(cita => cita.esAdicional).forEach(citaExistente => {
           const citaHoraInicio = new Date(`${programacionDateStr}T${citaExistente.horaInicio}`);
-            const citaHoraFin = new Date(`${programacionDateStr}T${citaExistente.horaFin}`);
+          const citaHoraFin = new Date(`${programacionDateStr}T${citaExistente.horaFin}`);
           citas.push(new CitaListado({
             idPaciente: citaExistente.idPaciente,
             nroCuenta: citaExistente.nroCuenta,
@@ -189,17 +185,19 @@ export class CitasIndexComponent implements OnInit {
             medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
             procedimiento: programacion.procedimiento.nombre,
             idMedico: programacion.medico.id,
-            idProgramacion: programacion.id
+            idProgramacion: programacion.id,
+            financiamiento: citaExistente.financiamiento // Asigna el valor
           }));
         });
+  
         this.citas = citas.sort((a, b) => a.horaInicio.getTime() - b.horaInicio.getTime());
       },
       error => {
-        // Manejo de errores
         console.error('Error al buscar citas por programación', error);
       }
     );
   }
+  
 
   formatToHHmm(time: string): string {
     if (!time) return '';

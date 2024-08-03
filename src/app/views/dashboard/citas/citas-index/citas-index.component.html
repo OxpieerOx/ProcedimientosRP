@@ -91,6 +91,7 @@
                   <th>Hora Fin</th>
                   <th>Estado</th>
                   <th>Adicional</th>
+                  <th>Financiamiento</th>
                   <th>Paciente</th>
                   <th>Número de Cuenta</th>
                   <th>Médico</th>
@@ -122,6 +123,7 @@
                       {{ cita.esAdicional ? 'SI' : 'NO' }}
                     </span>
                   </td>
+                  <td>{{ cita.financiamiento }}</td>
                   <td>{{ cita.idPaciente }}</td>
                   <td>{{ cita.nroCuenta }}</td>
                   <td>{{ cita.medico }}</td>

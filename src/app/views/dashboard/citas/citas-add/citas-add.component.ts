@@ -34,7 +34,7 @@ export class CitasAddComponent implements OnInit {
   ) {
     this.patientInfo = new Paciente();
     this.assignPatientForm = this.fb.group({
-      patientSearch: ['', Validators.required]
+      patientSearch: ['', Validators.required],
     });
     
     this.citaData = data.cita;
@@ -83,7 +83,7 @@ export class CitasAddComponent implements OnInit {
       const fechaFormatted = this.formatDate(this.citaData.fecha);
       const horaInicioFormatted = this.formatTime(this.citaData.horaInicio);
       const horaFinFormatted = this.formatTime(this.citaData.horaFin);
-
+      console.log("información del paciente", this.assignPatientForm.value);
       const citaRequest = new CitaRequestDTO({
         idPaciente: this.patientInfo.IdPaciente,
         nroCuenta: this.assignPatientForm.value.patientSearch,
@@ -94,9 +94,10 @@ export class CitasAddComponent implements OnInit {
         idMedico: this.citaData.idMedico,
         usuarioCreador: this.citaData.usuarioCreador,
         esAdicional: this.citaData.esAdicional,
-        estado: EstadoCita.PAGADO
+        estado: EstadoCita.PAGADO,
+        financiamiento: this.patientInfo.Financiamiento // Incluye el financiamiento
       });
-
+  
       this.citaService.insertarCita(citaRequest).subscribe(
         response => {
           this.snackBar.open('Cita guardada con éxito', 'Cerrar', {
@@ -114,6 +115,7 @@ export class CitasAddComponent implements OnInit {
       );
     }
   }
+  
 
   formatDate(date: Date): string {
     const year = date.getFullYear();

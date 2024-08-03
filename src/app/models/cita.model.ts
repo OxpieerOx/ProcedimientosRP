@@ -14,7 +14,8 @@ export class Cita {
   usuarioCreador: string;
   fechaRegistro: Date;
   esAdicional: boolean;
-
+  financiamiento: string; // Campo agregado
+  
   constructor(options?: Partial<Cita>) {
     this.id = options?.id || 0;
     this.idPaciente = options?.idPaciente || '';
@@ -23,10 +24,11 @@ export class Cita {
     this.horaInicio = options?.horaInicio || '';
     this.horaFin = options?.horaFin ? new Date(options.horaFin) : new Date();
     this.programacion = new Programacion(options?.programacion);
-    this.medico = new Medico(options?.medico)
+    this.medico = new Medico(options?.medico);
     this.estado = options?.estado || '';
     this.usuarioCreador = options?.usuarioCreador || '';
     this.fechaRegistro = options?.fechaRegistro ? new Date(options.fechaRegistro) : new Date();
     this.esAdicional = options?.esAdicional || false;
+    this.financiamiento = options?.financiamiento || ''; // Inicializar el campo financiamiento
   }
 }
