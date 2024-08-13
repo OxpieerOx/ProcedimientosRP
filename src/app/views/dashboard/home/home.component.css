@@ -1,12 +1,7 @@
-/* home.component.css */
-
+/* Contenedor principal */
 .container {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
-
 .cards-container {
   display: flex;
   gap: 20px; /* Espacio entre las tarjetas */
@@ -35,13 +30,27 @@
   color: #666;
 }
 
-.chart-container {
-  width: 100%; /* Ocupa todo el ancho disponible */
-  max-width: 800px; /* Ajusta el máximo ancho del gráfico */
-  margin: 0 auto; /* Centra el gráfico */
+
+/* Contenedor para los gráficos de barras */
+.bar-charts-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-canvas {
-  width: 100% !important; /* Asegura que el gráfico ocupe el 100% del contenedor */
-  height: 400px; /* Ajusta la altura del gráfico según tus necesidades */
+/* Estilo para los contenedores de gráficos */
+.chart-container {
+  position: relative;
+}
+
+/* Estilo específico para gráficos de barras */
+.bar-chart {
+  flex: 1;
+  max-width: 50%; /* Ajusta el ancho máximo de los gráficos de barras */
+}
+
+/* Estilo específico para el gráfico circular */
+.pie-chart {
+  max-width: 400px; /* Ajusta el ancho máximo del gráfico circular */
+  margin: 0 auto; /* Centra el gráfico circular horizontalmente */
 }

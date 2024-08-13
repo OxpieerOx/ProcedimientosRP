@@ -135,6 +135,9 @@
                     <button mat-icon-button *ngIf="cita.idPaciente == 'Sin Asignar'"(click)="openDialog(cita)">
                       <mat-icon >add</mat-icon> 
                     </button>
+                    <button mat-icon-button *ngIf="cita.idPaciente !== 'Sin Asignar'" (click)="onExportPDF(cita)">
+                      <mat-icon>get_app</mat-icon> 
+                    </button>
                   </td>
                 </tr>
               </tbody>

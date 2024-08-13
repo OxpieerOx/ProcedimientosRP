@@ -25,6 +25,8 @@
     "bootstrap": "^3.4.1",
     "chart.js": "^4.4.3",
     "flatpickr": "^4.6.13",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "ng2-charts": "^6.0.1",
     "ngx-multiple-dates": "^14.3.1",
     "ngx-spinner": "^14.0.0",

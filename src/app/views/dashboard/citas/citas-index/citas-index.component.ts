@@ -13,6 +13,8 @@ import { CitasAddComponent } from '../citas-add/citas-add.component';
 import { CitaService } from 'src/app/services/cita.service';
 import { CitaEditComponent } from '../cita-edit/cita-edit.component';
 import { EstadoCita } from 'src/app/models/request/citarequest.model';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-citas-index',
@@ -308,4 +310,42 @@ export class CitasIndexComponent implements OnInit {
     this.openDialog(citaAdicional);
   }
   
+
+  exportToPDF(cita: CitaListado): void {
+    // Crear un nuevo documento PDF con tamaño personalizado (por ejemplo, 70mm x 100mm)
+    const doc = new jsPDF({
+      format: [70, 120], // Tamaño en milímetros
+      unit: 'mm' // Unidad en milímetros
+    });
+
+    // Establecer fuente y tamaño
+    doc.setFont('helvetica');
+    doc.setFontSize(8); // Tamaño de fuente pequeño
+
+    // Agregar título centrado y en negrita
+    doc.setFont('helvetica', 'bold');
+    doc.text('Boleta de Cita Hospital Belen ', doc.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
+
+    // Cambiar a fuente normal para el contenido
+    doc.setFont('helvetica', 'normal');
+
+    // Agregar contenido al PDF con formato
+    const margin = 10; // Margen
+    doc.text(`Paciente: ${cita.idPaciente}`, margin, 20);
+    doc.text(`Nro Cuenta: ${cita.nroCuenta}`, margin, 30);
+    doc.text(`Fecha: ${this.datePipe.transform(cita.fecha, 'dd/MM/yyyy')}`, margin, 40);
+    doc.text(`Hora de Inicio: ${this.formatTime(cita.horaInicio)}`, margin, 50);
+    doc.text(`Hora de Fin: ${this.formatTime(cita.horaFin)}`, margin, 60);
+    doc.text(`Procedimiento: ${cita.procedimiento}`, margin, 70);
+    doc.text(`Médico: ${cita.medico}`, margin, 80);
+    doc.text(`Estado: ${cita.estado}`, margin, 90);
+    doc.text(`Financiamiento: ${cita.financiamiento}`, margin, 100);
+
+    // Guardar el PDF
+    doc.save('boleta_cita.pdf');
+  }
+
+  onExportPDF(cita: CitaListado): void {
+    this.exportToPDF(cita);
+  }
 }

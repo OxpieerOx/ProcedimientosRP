@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cita } from '../models/cita.model';
 import { CitaRequestDTO } from '../models/request/citarequest.model';
+import { CitaMesDTO } from '../models/citames.model';
+import { CitaFinanciamientoDTO } from '../models/citafinanciamiento.model';
 
 
 @Injectable({
@@ -51,6 +53,31 @@ export class CitaService {
     };
     const url = `${this.urlService}/${id}`;
     return this.http.put<{ result: boolean, data: Cita }>(url, citaRequest, httpOptions)
+      .pipe(map(response => response.data));
+  }
+
+  getCitasCountByMes(): Observable<CitaMesDTO[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get<{ result: boolean, data: CitaMesDTO[] }>(`${this.urlService}/citasPorMes`, httpOptions)
+      .pipe(map(response => response.data));
+  }
+
+  getCitasPorFinanciamiento(): Observable<CitaFinanciamientoDTO[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/citasPorFinanciamiento`;
+    return this.http.get<{ result: boolean, data: CitaFinanciamientoDTO[] }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
 }
