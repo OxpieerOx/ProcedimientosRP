@@ -1,29 +1,19 @@
 <div class="container">
-  <!-- Tarjetas con información -->
-  <div class="cards-container">
-    <div class="card" *ngFor="let procedimiento of procedimientos">
-      <div class="card-content">
-        <h4>{{ citasProcedimientos[procedimiento] }} Citas</h4>
-        <p>{{ procedimiento }}</p>
-      </div>
-    </div>
-  </div>
-
   <!-- Contenedor para los gráficos de barras -->
   <div class="bar-charts-container">
-    <!-- Gráfico de Procedimientos -->
-    <div class="chart-container bar-chart">
-      <canvas id="chartProcedimientos"></canvas>
-    </div>
-
     <!-- Gráfico por Mes -->
     <div class="chart-container bar-chart">
       <canvas id="chartMes"></canvas>
     </div>
+
+    <!-- Gráfico por Financiamiento -->
+    <div class="chart-container pie-chart">
+      <canvas id="chartFinanciamiento"></canvas>
+    </div>
   </div>
 
-  <!-- Gráfico por Financiamiento -->
-  <div class="chart-container pie-chart">
-    <canvas id="chartFinanciamiento"></canvas>
+  <!-- Gráfico de Procedimientos (más ancho) -->
+  <div class="chart-container wide-chart">
+    <canvas id="chartProcedimientos"></canvas>
   </div>
 </div>

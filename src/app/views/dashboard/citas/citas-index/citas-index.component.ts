@@ -71,14 +71,31 @@ export class CitasIndexComponent implements OnInit {
   }
 
   obtenerProcedimientos(servicioId: number): void {
-    this.procedimientoService.obtenerProcedimientosPorServicio(servicioId).subscribe(data => {
-      this.procedimientos = data;
-      if (this.procedimientos.length > 0) {
-        this.selectProcedimiento = this.procedimientos[0].id;
-        this.obtenerProgramacion(this.selectProcedimiento);
-      }
-    });
+    console.log('Servicio ID:', servicioId); // Asegúrate de que servicioId no sea undefined
+    console.log("servicios",this.servicios)
+    const selectedServicio = this.servicios.find(s => s.serviceId == servicioId);
+    console.log('Selected Servicio:', selectedServicio);
+    if (selectedServicio && selectedServicio.serviceName !== 'Cardiologia' && selectedServicio.serviceName !== 'Otorrino') {
+      this.procedimientoService.obtenerProcedimientoPorNombre('General').subscribe(data => {
+        console.log('Procedimientos:', data); // Verifica si el procedimiento se recibe correctamente
+        this.procedimientos = [data];
+        if (this.procedimientos.length > 0) {
+          this.selectProcedimiento = this.procedimientos[0].id;
+          this.obtenerProgramacion(this.selectProcedimiento);
+        }
+      });
+    } else {
+      this.procedimientoService.obtenerProcedimientosPorServicio(servicioId).subscribe(data => {
+        console.log('Procedimientos:', data); // Verifica si los procedimientos se reciben correctamente
+        this.procedimientos = data;
+        if (this.procedimientos.length > 0) {
+          this.selectProcedimiento = this.procedimientos[0].id;
+          this.obtenerProgramacion(this.selectProcedimiento);
+        }
+      });
+    }
   }
+  
 
   
 
@@ -142,7 +159,7 @@ export class CitasIndexComponent implements OnInit {
               esAdicional: citaExistente.esAdicional,
               estado: citaExistente.estado,
               medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
-              procedimiento: programacion.procedimiento.nombre,
+              procedimiento: citaExistente?.procedimiento?.nombre || programacion.procedimiento.nombre,
               idMedico: programacion.medico.id,
               idProgramacion: programacion.id,
               financiamiento: citaExistente.financiamiento // Asigna el valor
@@ -185,7 +202,7 @@ export class CitasIndexComponent implements OnInit {
             esAdicional: citaExistente.esAdicional,
             estado: EstadoCita.PAGADO,
             medico: `${programacion.medico.nombre} ${programacion.medico.apellido}`,
-            procedimiento: programacion.procedimiento.nombre,
+            procedimiento: citaExistente?.procedimiento?.nombre || programacion.procedimiento.nombre,
             idMedico: programacion.medico.id,
             idProgramacion: programacion.id,
             financiamiento: citaExistente.financiamiento // Asigna el valor
@@ -255,7 +272,7 @@ export class CitasIndexComponent implements OnInit {
 
     const dialogRef = this.dialog.open(CitasAddComponent, {
       width: '500px',
-      data: { cita: cita } // Pasar el objeto cita como dato
+      data: { cita: cita, servicioId:this.selectServicio } // Pasar el objeto cita como dato
     });
 
     dialogRef.afterClosed().subscribe(result => {

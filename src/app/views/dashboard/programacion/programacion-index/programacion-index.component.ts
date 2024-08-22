@@ -53,14 +53,32 @@ export class ProgramacionIndexComponent implements OnInit {
   }
 
   obtenerProcedimientos(servicioId: number): void {
-    this.procedimientoService.obtenerProcedimientosPorServicio(servicioId).subscribe(data => {
-      this.procedimientos = data;
-      if (this.procedimientos.length > 0) {
-        this.selectProcedimiento = this.procedimientos[0].id; // Seleccionar el primer procedimiento
-        this.obtenerProgramaciones(this.selectProcedimiento); // Obtener programaciones para el primer procedimiento
-      }
-    });
+    console.log('Servicio ID:', servicioId); // Asegúrate de que servicioId no sea undefined
+    console.log("servicios",this.servicios)
+    const selectedServicio = this.servicios.find(s => s.serviceId == servicioId);
+    console.log('Selected Servicio:', selectedServicio);
+    if (selectedServicio && selectedServicio.serviceName !== 'Cardiologia' && selectedServicio.serviceName !== 'Otorrino') {
+      this.procedimientoService.obtenerProcedimientoPorNombre('General').subscribe(data => {
+        console.log('Procedimientos:', data); // Verifica si el procedimiento se recibe correctamente
+        this.procedimientos = [data];
+        if (this.procedimientos.length > 0) {
+          this.selectProcedimiento = this.procedimientos[0].id;
+          this.obtenerProgramaciones(this.selectProcedimiento);
+        }
+      });
+    } else {
+      this.procedimientoService.obtenerProcedimientosPorServicio(servicioId).subscribe(data => {
+        console.log('Procedimientos:', data); // Verifica si los procedimientos se reciben correctamente
+        this.procedimientos = data;
+        if (this.procedimientos.length > 0) {
+          this.selectProcedimiento = this.procedimientos[0].id;
+          this.obtenerProgramaciones(this.selectProcedimiento);
+        }
+      });
+    }
   }
+  
+  
 
   onProcedimientoChange(): void {
     this.obtenerProgramaciones(this.selectProcedimiento);

@@ -1,3 +1,5 @@
+import { Procedimiento } from "./procedimiento.model";
+
 export class CitaListado {
   id: number;
   idPaciente: string;
@@ -11,7 +13,7 @@ export class CitaListado {
   esAdicional: boolean;
   estado: string;
   medico: string;
-  procedimiento: string;
+  procedimiento: any;
   idMedico: number; // Campo para almacenar el ID del médico
   idProgramacion: number; // Campo para almacenar el ID de la programación
   financiamiento: string; // Nuevo campo para almacenar el financiamiento

@@ -65,9 +65,27 @@
         </tbody>
       </table>
     </div>
+
+
+
+      <!-- Dropdown de Procedimientos -->
+      <div *ngIf="showProcedimientosDropdown && patientFound && !isLoading" class="form-group">
+        <label for="procedimientos">Seleccione un procedimiento</label>
+        <select class="form-control" id="procedimientos" formControlName="selectedProcedimiento">
+          <option *ngFor="let proc of procedimientos" [value]="proc.id">{{ proc.nombre }}</option>
+        </select>
+        
+      </div>
+
+      
   </form>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
-  <button type="button" class="btn btn-primary" (click)="onAssign()" [disabled]="!patientFound">Asignar</button>
+  <button type="button" class="btn btn-primary" 
+  (click)="onAssign()" 
+  [disabled]="!patientFound || (showProcedimientosDropdown && assignPatientForm.get('selectedProcedimiento')?.invalid)">
+  Asignar
+</button>
+
 </div>

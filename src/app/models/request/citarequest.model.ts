@@ -10,6 +10,7 @@ export class CitaRequestDTO {
   esAdicional: boolean;
   estado: EstadoCita; // Usar el enum para el estado
   financiamiento: string; // Campo agregado
+  idProcedimiento?: number; // Campo opcional agregado
 
   constructor(options?: Partial<CitaRequestDTO>) {
       this.idPaciente = options?.idPaciente || 0;
@@ -23,6 +24,7 @@ export class CitaRequestDTO {
       this.esAdicional = options?.esAdicional || false;
       this.estado = options?.estado || EstadoCita.ABIERTO; // Establecer un valor predeterminado para estado
       this.financiamiento = options?.financiamiento || ''; // Inicializar el campo financiamiento
+      this.idProcedimiento = options?.idProcedimiento || undefined;
   }
 }
   

@@ -14,6 +14,7 @@ export class Cita {
   usuarioCreador: string;
   fechaRegistro: Date;
   esAdicional: boolean;
+  procedimiento:any;
   financiamiento: string; // Campo agregado
   
   constructor(options?: Partial<Cita>) {
