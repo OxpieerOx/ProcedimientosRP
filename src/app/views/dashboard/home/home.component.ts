@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { CitaFinanciamientoDTO } from 'src/app/models/citafinanciamiento.model';
 import { CitaMesDTO } from 'src/app/models/citames.model';
-import { TooltipItem } from 'chart.js';
-
+import { TooltipItem } from 'chart.js'; 
 import { ProcedimientoCitas } from 'src/app/models/procedimientocitas.model';
-
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import { CitaService } from 'src/app/services/cita.service';
 import { ProcedimientoService } from 'src/app/services/procedimiento.service';
+import { CitaMedicoProcedimientoResponse } from 'src/app/models/citaprocedimientomedico.model';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,9 @@ import { ProcedimientoService } from 'src/app/services/procedimiento.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  citasMedico: { [key: string]: number } = {};
+  medicos: string[] = [];
+  cantidadMedico: number[] = [];
   citasProcedimientos: { [key: string]: number } = {};
   procedimientos: string[] = [];
   citas: number[] = [];
@@ -27,7 +30,16 @@ export class HomeComponent implements OnInit {
   citasFinanciamiento: { [key: string]: number } = {};
   tiposFinanciamiento: string[] = [];
   cantidadFinanciamiento: number[] = [];
-
+  citasMedicoProcedimiento: {
+    [medico: string]: {
+      [procedimiento: string]: {
+        [año: number]: {
+          [mes: number]: number;
+        }
+      }
+    }
+  } = {};
+  cantidadMedicoProcedimiento: number[] = [];
   chartProcedimientos: any;
   chartMes: any;
   chartFinanciamiento: any;
@@ -39,6 +51,7 @@ export class HomeComponent implements OnInit {
     this.getCitasByProcedimiento();
     this.getCitasByMes();
     this.getCitasByFinanciamiento();
+    this.getCitasByMedicoProcedimiento();
   }
 
   getCitasByProcedimiento(): void {
@@ -53,6 +66,46 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getCitasByMedicoProcedimiento(): void {
+    this.citaService.getCitasCountByMedicoAndProcedimiento().subscribe((data: CitaMedicoProcedimientoResponse[]) => {
+      this.citasMedicoProcedimiento = {}; // Limpiar el objeto
+  
+      // Procesar los datos recibidos
+      data.forEach(item => {
+        const año = Number(item.año); // Convertir a número
+        const mes = Number(item.mes); // Convertir a número
+  
+        if (!this.citasMedicoProcedimiento[item.medicoNombre]) {
+          this.citasMedicoProcedimiento[item.medicoNombre] = {};
+        }
+        if (!this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre]) {
+          this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre] = {};
+        }
+        if (!this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año]) {
+          this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año] = {};
+        }
+        this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año][mes] = item.cantidad;
+      });
+  
+      // Obtener listas de médicos y procedimientos
+      this.medicos = Object.keys(this.citasMedicoProcedimiento);
+      this.procedimientos = Array.from(new Set(data.map(item => item.procedimientoNombre)));
+  
+      // Calcular las cantidades
+      this.cantidadMedicoProcedimiento = this.medicos.flatMap(medico => 
+        this.procedimientos.flatMap(procedimiento =>
+          Object.keys(this.citasMedicoProcedimiento[medico][procedimiento] || {}).flatMap(añoStr =>
+            Object.keys(this.citasMedicoProcedimiento[medico][procedimiento][Number(añoStr)] || {}).map(mesStr =>
+              this.citasMedicoProcedimiento[medico][procedimiento][Number(añoStr)][Number(mesStr)] || 0
+            )
+          )
+        )
+      );
+    });
+  }
+  
+  
+  
   getCitasByMes(): void {
     this.citaService.getCitasCountByMes().subscribe((data: CitaMesDTO[]) => {
       this.citasMes = {};
@@ -214,5 +267,59 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+
+  exportToExcel(): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    
+    // Crear las hojas para cada reporte con nombres más cortos
+    const worksheetProcedimientos = XLSX.utils.json_to_sheet(this.convertToJSON(this.procedimientos, this.citas, 'Procedimiento', 'Citas'));
+    const worksheetMes = XLSX.utils.json_to_sheet(this.convertToJSON(this.meses, this.cantidadMes, 'Mes', 'Citas'));
+    const worksheetFinanciamiento = XLSX.utils.json_to_sheet(this.convertToJSON(this.tiposFinanciamiento, this.cantidadFinanciamiento, 'Tipo Finan', 'Citas')); // Nombre más corto
+    const worksheetMedicoProcedimiento = XLSX.utils.json_to_sheet(this.convertMedicoProcedimientoToJSON());
+    
+    // Crear el libro de trabajo con las hojas
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheetProcedimientos, 'Proc'); // Nombre más corto
+    XLSX.utils.book_append_sheet(workbook, worksheetMes, 'Mes'); // Nombre más corto
+    XLSX.utils.book_append_sheet(workbook, worksheetFinanciamiento, 'Financiamiento'); // Nombre más corto
+    XLSX.utils.book_append_sheet(workbook, worksheetMedicoProcedimiento, 'MedicoProc'); // Nombre más corto
+    
+    // Exportar el archivo
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
+    saveAs(data, `reportes_${new Date().getTime()}.xlsx`);
+  }
+  
+  convertToJSON(keys: string[], values: number[], keyLabel: string, valueLabel: string): any[] {
+    return keys.map((key, index) => ({
+      [keyLabel]: key,
+      [valueLabel]: values[index]
+    }));
+  }
+  convertMedicoProcedimientoToJSON(): any[] {
+    const result: any[] = [];
+    for (const medico of this.medicos) {
+      for (const procedimiento of this.procedimientos) {
+        const años = this.citasMedicoProcedimiento[medico][procedimiento] || {};
+        for (const añoStr in años) {
+          const año = Number(añoStr); // Convertir a número
+          const meses = años[año] || {};
+          for (const mesStr in meses) {
+            const mes = Number(mesStr); // Convertir a número
+            result.push({
+              'Médico': medico,
+              'Procedimiento': procedimiento,
+              'Año': año,
+              'Mes': mes,
+              'Cantidad': meses[mes] || 0
+            });
+          }
+        }
+      }
+    }
+    return result;
+  }
   
 }
+  

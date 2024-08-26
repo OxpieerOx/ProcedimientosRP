@@ -54,3 +54,30 @@
   max-width: 400px; /* Ajusta el ancho máximo del gráfico circular */
   margin: 0 auto; /* Centra el gráfico circular horizontalmente */
 }
+
+.export-button {
+  text-align: center; /* Centra el botón horizontalmente */
+  margin-top: 20px;
+}
+
+.excel-button {
+  background-color: #28a745; /* Color de fondo verde típico de Excel */
+  color: white; /* Color del texto */
+  border: none;
+  padding: 10px 20px; /* Espaciado interno */
+  font-size: 16px; /* Tamaño de la fuente */
+  cursor: pointer; /* Manito al pasar por encima */
+  border-radius: 5px; /* Esquinas redondeadas */
+  display: inline-flex; /* Para alinear el ícono y el texto */
+  align-items: center; /* Alinear verticalmente ícono y texto */
+  justify-content: center; /* Centrar contenido */
+  transition: background-color 0.3s ease; /* Suavizar el cambio de color */
+}
+
+.excel-button i {
+  margin-right: 8px; /* Espacio entre el ícono y el texto */
+}
+
+.excel-button:hover {
+  background-color: #218838; /* Color de fondo al pasar el mouse */
+}

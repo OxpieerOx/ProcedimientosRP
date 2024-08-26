@@ -1,4 +1,6 @@
 <div class="container">
+  <!-- Tarjetas con información -->
+
   <!-- Contenedor para los gráficos de barras -->
   <div class="bar-charts-container">
     <!-- Gráfico por Mes -->
@@ -15,5 +17,12 @@
   <!-- Gráfico de Procedimientos (más ancho) -->
   <div class="chart-container wide-chart">
     <canvas id="chartProcedimientos"></canvas>
+  </div>
+
+  <!-- Botón para exportar a Excel -->
+  <div class="export-button">
+    <button (click)="exportToExcel()" class="excel-button">
+      <i class="fa fa-file-excel"></i> Exportar a Excel
+    </button>
   </div>
 </div>

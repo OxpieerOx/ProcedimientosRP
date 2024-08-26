@@ -7,6 +7,7 @@ import { Cita } from '../models/cita.model';
 import { CitaRequestDTO } from '../models/request/citarequest.model';
 import { CitaMesDTO } from '../models/citames.model';
 import { CitaFinanciamientoDTO } from '../models/citafinanciamiento.model';
+import { CitaMedicoProcedimientoResponse } from '../models/citaprocedimientomedico.model';
 
 
 @Injectable({
@@ -78,6 +79,19 @@ export class CitaService {
     };
     const url = `${this.urlService}/citasPorFinanciamiento`;
     return this.http.get<{ result: boolean, data: CitaFinanciamientoDTO[] }>(url, httpOptions)
+      .pipe(map(response => response.data));
+  }
+
+  getCitasCountByMedicoAndProcedimiento(): Observable<CitaMedicoProcedimientoResponse[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/medico-procedimiento`;
+    return this.http.get<{ result: boolean, data: CitaMedicoProcedimientoResponse[] }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
 }
