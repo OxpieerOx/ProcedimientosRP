@@ -19,6 +19,9 @@ RUN npm run build --prod
 # Usar una imagen de servidor web para servir la aplicación Angular
 FROM nginx:alpine
 
+# Copiar la configuración personalizada de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copiar la salida de la build de Angular a la carpeta que Nginx usará para servir los archivos
 COPY --from=build /app/dist/plantilla-login /usr/share/nginx/html
 
