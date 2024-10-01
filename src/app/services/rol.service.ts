@@ -21,6 +21,18 @@ export class RolService {
     this.role = new Rol()
    }
 
+   obtenerRoles(): Observable<Rol[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.get<{ result: boolean, data: Rol[] }>(this.urlService, httpOptions)
+      .pipe(map(response => response.data));
+   }
+
    findRolesByUsername(username: string): Observable<Rol[]> {
     const token = localStorage.getItem('token');
     const httpOptions = {

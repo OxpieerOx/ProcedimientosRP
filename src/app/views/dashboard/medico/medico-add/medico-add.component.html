@@ -1,0 +1,77 @@
+<div class="modal-header">
+  <h5 class="modal-title mr-auto">{{ modalTitle }}</h5>
+  <button type="button" class="close" aria-label="Close" (click)="onNoClick()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="crearMedicoForm">
+    <div class="form">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="nombre">Nombre</label>
+          <input type="text" class="form-control" id="nombre" formControlName="nombre">
+          <div
+            *ngIf="crearMedicoForm.get('nombre')?.invalid && (crearMedicoForm.get('nombre')?.dirty || crearMedicoForm.get('nombre')?.touched)">
+            <small class="text-danger">El nombre es requerido.</small>
+          </div>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="apellido">Apellido</label>
+          <input type="text" class="form-control" id="apellido" formControlName="apellido">
+          <div
+            *ngIf="crearMedicoForm.get('apellido')?.invalid && (crearMedicoForm.get('apellido')?.dirty || crearMedicoForm.get('apellido')?.touched)">
+            <small class="text-danger">El apellido es requerido.</small>
+          </div>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" id="email" formControlName="email">
+          <div>
+            <small
+              *ngIf="(crearMedicoForm.get('email')?.dirty || crearMedicoForm.get('email')?.touched) && crearMedicoForm.get('email')?.hasError('required')"
+              class="text-danger">El email es requerido.</small>
+            <small
+              *ngIf="(crearMedicoForm.get('email')?.dirty || crearMedicoForm.get('email')?.touched) && crearMedicoForm.get('email')?.hasError('email')"
+              class="text-danger">El formato del Email no es el adecuado.</small>
+          </div>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="telefono">Teléfono</label>
+          <input type="text" class="form-control" id="telefono" formControlName="telefono">
+          <div>
+            <small
+              *ngIf="(crearMedicoForm.get('telefono')?.dirty || crearMedicoForm.get('telefono')?.touched) && crearMedicoForm.get('telefono')?.hasError('required')"
+              class="text-danger">El telefono es requerido.</small>
+            <small
+              *ngIf="(crearMedicoForm.get('telefono')?.dirty || crearMedicoForm.get('telefono')?.touched) && (crearMedicoForm.get('telefono')?.hasError('minlength') || crearMedicoForm.get('telefono')?.hasError('maxlength'))"
+              class="text-danger">El teléfono debe tener 9 dígitos.</small>
+            <small
+              *ngIf="(crearMedicoForm.get('telefono')?.dirty || crearMedicoForm.get('telefono')?.touched) && crearMedicoForm.get('telefono')?.hasError('pattern')"
+              class="text-danger">El teléfono debe ser un número.</small>
+          </div>
+        </div>
+
+        <mat-form-field>
+          <mat-label>Toppings</mat-label>
+          <mat-select formControlName="roleIds" multiple>
+            <mat-option [value]="rol.id" *ngFor="let rol of roles">
+              {{ rol.rolName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="onNoClick()">Cancelar</button>
+  <button type="submit" class="btn btn-primary" (click)="onGuardar()" [disabled]="crearMedicoForm.invalid">Guardar
+  </button>
+</div>

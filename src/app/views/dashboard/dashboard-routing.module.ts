@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { ProgramacionIndexComponent } from './programacion/programacion-index/programacion-index.component';
 import { RoleGuardGuard } from 'src/app/guards/role-guard.guard';
 import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
+import { MedicoIndexComponent } from "./medico/medico-index/medico-index.component";
 
 
 
@@ -15,7 +16,12 @@ const routes: Routes = [
   component:DashboardComponent,
   children: [
     {
-      path: 'home', component: HomeComponent, data: { titulo: 'Dashboard' } 
+      path: '',
+      redirectTo: 'home',
+      pathMatch: 'full'
+    },
+    {
+      path: 'home', component: HomeComponent, data: { titulo: 'Dashboard' }
     },
     {
       path: 'programacion', component: ProgramacionIndexComponent, data: { titulo: 'Programacion' } ,
@@ -25,8 +31,12 @@ const routes: Routes = [
       path: 'citas', component: CitasIndexComponent, data: { titulo: 'Citas' } ,
       canActivate: [RoleGuardGuard]
     },
+    {
+      path: 'medicos', component: MedicoIndexComponent, data: { titulo: 'Medicos' } ,
+      canActivate: [RoleGuardGuard]
+    },
     { path: '**', redirectTo: '' }
-   
+
   ]
 }
 ];

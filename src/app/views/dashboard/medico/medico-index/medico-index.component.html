@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="row animated fadeIn fast">
+    <!-- Filter box: Calendar, service, procedure -->
+    <div class="col-md-12 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="form-row justify-content-between align-items-center">
+            <div class="col-md-4 mb-3">
+              <label for="selectServicio">Seleccione el servicio:</label>
+              <select class="form-control" id="selectServicio" [(ngModel)]="selectServicio" (ngModelChange)="onServicioChange()">
+                <option *ngFor="let servicio of servicios" [value]="servicio.serviceId">{{ servicio.serviceName }}</option>
+              </select>
+            </div>
+            <button mat-raised-button color="primary" (click)="openDialogAddMedico()" >Agregar Médico</button>
+            <!-- Calendar for selecting date and time -->
+       <!--     <div class="col-md-4 mb-3">
+              <label for="inlineDatePicker">Seleccionar Fecha y Hora</label>
+              <div class="panel panel-default">
+                <div class="panel-body inline-flatpickr">
+                  <input
+                    class="form-control"
+                    type="text"
+                    mwlFlatpickr
+                    [(ngModel)]="inlineDatePicker"
+                    [altInput]="true"
+                    [convertModelValue]="true"
+                    [inline]="true"
+                    (ngModelChange)="onProcedimientoChange()"
+                  />
+                </div>
+              </div>
+            </div>-->
+          </div>
+         <!-- <div class="form-row justify-content-center">
+            &lt;!&ndash; Dropdown for selecting service and procedure &ndash;&gt;
+            <div class="col-md-4 mb-3">
+              <label for="selectServicio">Seleccione el servicio:</label>
+              <select class="form-control" id="selectServicio" [(ngModel)]="selectServicio" (ngModelChange)="onServicioChange()">
+                <option *ngFor="let servicio of servicios" [value]="servicio.serviceId">{{ servicio.serviceName }}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="selectProcedimiento">Seleccione el procedimiento:</label>
+              <select class="form-control" id="selectProcedimiento" [(ngModel)]="selectProcedimiento" (ngModelChange)="onProcedimientoChange()" [disabled]="!selectServicio">
+                <option *ngFor="let procedimiento of procedimientos" [value]="procedimiento.id">{{ procedimiento.nombre }}</option>
+              </select>
+            </div>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón de Agregar Programación -->
+  <div class="row animated fadeIn fast">
+    <div class="col-12">
+   <!--   <div class="d-flex justify-content-end mb-3" *ngIf="citas.length">
+        <button mat-raised-button color="primary" (click)="openAdditionalDialog()" [disabled]="!allCitasPagado()">Agregar Cita Adicional</button>
+      </div>-->
+    </div>
+  </div>
+
+  <!-- Mensaje de cargando -->
+  <div class="row animated fadeIn fast" *ngIf="!medicos.length && isLoadingMedicos">
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        <h4 class="alert-heading">Cargando</h4>
+        <i class="fa fa-spin fa-refresh fa-2x"></i>
+        <p class="mb-0">Por favor espere</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mostrar mensaje de lista vacía si no hay programaciones disponibles -->
+  <div class="row animated fadeIn fast" *ngIf="!medicos.length && !isLoadingMedicos">
+    <div class="col-12">
+      <div class="alert alert-warning text-center">
+        <h4 class="alert-heading">Sin Médicos</h4>
+        <p class="mb-0">No hay Médicos Creados.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table of appointments -->
+  <div class="row animated fadeIn fast" *ngIf="medicos.length">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Total de Médicos ({{ medicos.length }})</h4>
+          <h6 class="card-subtitle">Médicos registrados en mi aplicación</h6>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th class="text-nowrap w100">Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let medico of medicos">
+                <td>{{ medico.nombre }}</td>
+                <td>{{ medico.apellido}}</td>
+                <td>{{ medico.email }}</td>
+                <td>{{ medico.telefono }}</td>
+                <td>
+                  <button mat-icon-button  *ngIf="medico.id" (click)="openDialogEditMedico(medico)"  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

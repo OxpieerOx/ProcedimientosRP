@@ -26,6 +26,10 @@ import { ProgramacionFechaComponent } from './programacion/programacion-fecha/pr
 import { CitaEditComponent } from './citas/cita-edit/cita-edit.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { MedicoAddComponent } from './medico/medico-add/medico-add.component';
+import { MedicoEditComponent } from './medico/medico-edit/medico-edit.component';
+import { MedicoIndexComponent } from './medico/medico-index/medico-index.component';
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -37,26 +41,30 @@ import { MatTableModule } from '@angular/material/table';
     CitasAddComponent,
     ProgramacionFechaComponent,
     CitaEditComponent,
+    MedicoAddComponent,
+    MedicoEditComponent,
+    MedicoIndexComponent,
   ],
-  imports: [
-    CommonModule,
-    MatPaginatorModule,
-    MatTableModule,
-    DashboardRoutingModule,
-    NgxMultipleDatesModule,
-    ComponentsModule,
-    FormsModule,
-    RouterModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatSnackBarModule,
-    FlatpickrModule.forRoot()
-  ]
+    imports: [
+        CommonModule,
+        MatPaginatorModule,
+        MatTableModule,
+        DashboardRoutingModule,
+        NgxMultipleDatesModule,
+        ComponentsModule,
+        FormsModule,
+        RouterModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatSnackBarModule,
+        FlatpickrModule.forRoot(),
+        MatSelectModule
+    ]
 })
 export class DashboardModule { }

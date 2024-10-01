@@ -26,6 +26,11 @@ export class SidebarService {
       url: 'citas'
     },
     {
+      titulo: 'Médicos',
+      icono: 'mdi mdi-account',
+      url: 'medicos'
+    },
+    {
       titulo: 'Atencion',
       icono: 'mdi mdi-hospital',
       url: '/'
@@ -33,7 +38,7 @@ export class SidebarService {
   ];
 
   private rolePermissions: { [key: number]: string[] } = {
-    5: ['Home', 'Programacion', 'Citas'],
+    5: ['Home', 'Programacion', 'Citas', 'Médicos'],
     4: ['Atencion'],
   };
 
@@ -65,6 +70,6 @@ export class SidebarService {
     });
 
     return menu.filter(item => allowedTitles.has(item.titulo));
-  }   
+  }
 
 }
