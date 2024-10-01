@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { ProgramacionIndexComponent } from './programacion/programacion-index/programacion-index.component';
 import { RoleGuardGuard } from 'src/app/guards/role-guard.guard';
 import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
+import { AtencionIndexComponent } from './atencion/atencion-index/atencion-index.component';
 
 
 
@@ -24,6 +25,10 @@ const routes: Routes = [
     {
       path: 'citas', component: CitasIndexComponent, data: { titulo: 'Citas' } ,
       canActivate: [RoleGuardGuard]
+    },
+    {
+      path: 'atencion', component: AtencionIndexComponent, data: { titulo: 'Atencion' } ,
+      
     },
     { path: '**', redirectTo: '' }
    

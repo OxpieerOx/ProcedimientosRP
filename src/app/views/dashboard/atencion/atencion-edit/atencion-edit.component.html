@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{ data.cita.informeDiagnostico ? 'Editar Atención' : 'Crear Atención' }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="editAtencionForm">
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Informe del Diagnóstico</mat-label>
+      <textarea matInput formControlName="informe" rows="5" style="resize: none;"></textarea>
+      <mat-error *ngIf="editAtencionForm.get('informe')?.invalid">El informe es obligatorio</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()" style="background-color: #f44336; color: white;">Cancelar</button>
+  <button mat-button (click)="onSave()" [disabled]="!editAtencionForm.valid" style="background-color: #3700ff; color: white;">Guardar</button>
+</div>

@@ -26,6 +26,8 @@ import { ProgramacionFechaComponent } from './programacion/programacion-fecha/pr
 import { CitaEditComponent } from './citas/cita-edit/cita-edit.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { AtencionIndexComponent } from './atencion/atencion-index/atencion-index.component';
+import { AtencionEditComponent } from './atencion/atencion-edit/atencion-edit.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { MatTableModule } from '@angular/material/table';
     CitasAddComponent,
     ProgramacionFechaComponent,
     CitaEditComponent,
+    AtencionIndexComponent,
+    AtencionEditComponent,
   ],
   imports: [
     CommonModule,

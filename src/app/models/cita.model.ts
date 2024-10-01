@@ -16,6 +16,8 @@ export class Cita {
   esAdicional: boolean;
   procedimiento:any;
   financiamiento: string; // Campo agregado
+  informeDiagnostico : string;
+
   
   constructor(options?: Partial<Cita>) {
     this.id = options?.id || 0;
@@ -31,5 +33,6 @@ export class Cita {
     this.fechaRegistro = options?.fechaRegistro ? new Date(options.fechaRegistro) : new Date();
     this.esAdicional = options?.esAdicional || false;
     this.financiamiento = options?.financiamiento || ''; // Inicializar el campo financiamiento
+    this.informeDiagnostico = options?.informeDiagnostico || '';
   }
 }

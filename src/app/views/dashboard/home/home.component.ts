@@ -34,11 +34,15 @@ export class HomeComponent implements OnInit {
     [medico: string]: {
       [procedimiento: string]: {
         [año: number]: {
-          [mes: number]: number;
+          [mes: number]: {
+            cantidad: number;
+            servicio: string; // Agregar el campo servicio
+          }
         }
       }
     }
   } = {};
+  
   cantidadMedicoProcedimiento: number[] = [];
   chartProcedimientos: any;
   chartMes: any;
@@ -84,7 +88,12 @@ export class HomeComponent implements OnInit {
         if (!this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año]) {
           this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año] = {};
         }
-        this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año][mes] = item.cantidad;
+  
+        // Llenar la cantidad y el servicio
+        this.citasMedicoProcedimiento[item.medicoNombre][item.procedimientoNombre][año][mes] = {
+          cantidad: item.cantidad,
+          servicio: item.servicioNombre // Asumiendo que el campo servicio está en la respuesta
+        };
       });
   
       // Obtener listas de médicos y procedimientos
@@ -96,7 +105,7 @@ export class HomeComponent implements OnInit {
         this.procedimientos.flatMap(procedimiento =>
           Object.keys(this.citasMedicoProcedimiento[medico][procedimiento] || {}).flatMap(añoStr =>
             Object.keys(this.citasMedicoProcedimiento[medico][procedimiento][Number(añoStr)] || {}).map(mesStr =>
-              this.citasMedicoProcedimiento[medico][procedimiento][Number(añoStr)][Number(mesStr)] || 0
+              this.citasMedicoProcedimiento[medico][procedimiento][Number(añoStr)][Number(mesStr)].cantidad || 0 // Usar el campo cantidad
             )
           )
         )
@@ -307,12 +316,16 @@ export class HomeComponent implements OnInit {
           const meses = años[año] || {};
           for (const mesStr in meses) {
             const mes = Number(mesStr); // Convertir a número
+            // Aquí se asume que hay un campo `servicio` en la estructura, modificar según tu implementación
+            const servicio = meses[mes]?.servicio || 'Sin Servicio';
+            const cantidad = meses[mes]?.cantidad || 0; // Obtener cantidad
             result.push({
               'Médico': medico,
               'Procedimiento': procedimiento,
+              'Servicio': servicio, // Agregar el campo servicio
               'Año': año,
               'Mes': mes,
-              'Cantidad': meses[mes] || 0
+              'Cantidad': cantidad || 0
             });
           }
         }
@@ -320,6 +333,7 @@ export class HomeComponent implements OnInit {
     }
     return result;
   }
+  
   
 }
   
