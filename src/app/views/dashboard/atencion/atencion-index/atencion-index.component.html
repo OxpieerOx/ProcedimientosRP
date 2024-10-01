@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="row animated fadeIn fast">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-row">
+              <!-- Input para seleccionar la fecha -->
+              <div class="col-md-4 mb-3">
+                <label for="inputFecha">Seleccione la fecha:</label>
+                <input type="date" class="form-control" id="inputFecha" [(ngModel)]="filterFecha">
+              </div>
+              <!-- Input para idPaciente -->
+              <div class="col-md-4 mb-3">
+                <label for="inputIdPaciente">ID Paciente:</label>
+                <input type="text" class="form-control" id="inputIdPaciente" [(ngModel)]="filterIdPaciente">
+              </div>
+              <!-- Input para nCuenta -->
+              <div class="col-md-4 mb-3">
+                <label for="inputNCuenta">N° Cuenta:</label>
+                <input type="text" class="form-control" id="inputNCuenta" [(ngModel)]="filterNCuenta">
+              </div>
+            </div>
+            <!-- Botón para aplicar los filtros -->
+            <div class="form-row">
+              <div class="col-md-12 text-right">
+                <button class="btn btn-primary" (click)="aplicarFiltros()">Aplicar Filtros</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mostrar mensaje de cargando -->
+    <div class="row animated fadeIn fast" *ngIf="isLoadingCitas">
+      <div class="col-12">
+        <div class="alert alert-info text-center">
+          <h4 class="alert-heading">Cargando</h4>
+          <i class="fa fa-spin fa-refresh fa-2x"></i>
+          <p class="mb-0">Por favor espere</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mostrar mensaje de lista vacía si no hay citas disponibles -->
+    <div class="row animated fadeIn fast" *ngIf="!citas.length && !isLoadingCitas">
+      <div class="col-12">
+        <div class="alert alert-warning text-center">
+          <h4 class="alert-heading">Sin Citas</h4>
+          <p class="mb-0">No hay citas disponibles actualmente.</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Tabla de citas -->
+    <div class="row animated fadeIn fast" *ngIf="citas.length">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Citas del Médico</h4>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Id.Paciente</th>
+                    <th>N° Cuenta</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Estado</th>
+                    <th>Adicional</th>
+                    <th>Financiamiento</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cita of citas">
+                    <td>{{ cita.fecha | date: 'MM/dd/yyyy' }}</td>
+                    <td>{{ cita.idPaciente }}</td>
+                    <td>{{ cita.nroCuenta }}</td>
+                    <td>{{ cita.horaInicio }}</td>
+                    <td>{{ cita.horaFin  }}</td>
+                    <td>
+                      <span class="badge badge-custom"
+                      [ngClass]="{
+                          'badge-custom-success': cita.estado === 'ABIERTO',
+                          'badge-custom-warning': cita.estado === 'PAGADO',
+                          'badge-custom-danger': cita.estado === 'ATENDIDO'
+                      }">
+                    {{ cita.estado }}
+                </span>
+                    </td>
+                    <td>
+                      <!-- Badge personalizado para 'Es Adicional' -->
+                      <span class="badge badge-custom"
+                        [ngClass]="{
+                          'badge-custom-success': cita.esAdicional,
+                          'badge-custom-danger': !cita.esAdicional
+                        }">
+                        {{ cita.esAdicional ? 'SI' : 'NO' }}
+                      </span>
+                    </td>
+                    <td>{{ cita.financiamiento }}</td>
+                    <td>
+                      <button mat-icon-button  *ngIf="cita.idPaciente !== 'Sin Asignar'" (click)="openDialog(cita)"  >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

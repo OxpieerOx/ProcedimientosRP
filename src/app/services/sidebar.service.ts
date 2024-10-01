@@ -33,7 +33,7 @@ export class SidebarService {
     {
       titulo: 'Atencion',
       icono: 'mdi mdi-hospital',
-      url: '/'
+      url: 'atencion'
     },
   ];
 
@@ -52,6 +52,7 @@ export class SidebarService {
         const roleIds = roles.map(role => role.id); // Obtener todos los IDs de roles del usuario
         const filteredMenu = this.filterMenuByRoles(this.initialMenu, roleIds);
         this._menu.next(filteredMenu); // Emitir el menú filtrado
+        localStorage.setItem('roleIds', JSON.stringify(roleIds));
       },
       error => {
         console.error('Error al cargar roles:', error);

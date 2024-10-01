@@ -129,6 +129,7 @@ export class CitasIndexComponent implements OnInit {
   calcularCitas(fechaInicioStr: string, fechaFinStr: string, tiempoDuracion: number, programacion: any): void {
     const programacionDateStr = this.datePipe.transform(this.inlineDatePicker, 'yyyy-MM-dd')!;
     this.citService.buscarporId(programacion.id).subscribe(
+      
       citasExistente => {
         const citas: CitaListado[] = [];
         const inicio = this.convertToDate(programacionDateStr, fechaInicioStr);
@@ -146,11 +147,13 @@ export class CitasIndexComponent implements OnInit {
           });
   
           if (citaExistente) {
+            const fechaNueva = new Date(citaExistente.fecha + 'T00:00:00');
+            console.log("fechaNueav",fechaNueva)
             citas.push(new CitaListado({
               id: citaExistente.id,
               idPaciente: citaExistente.idPaciente,
               nroCuenta: citaExistente.nroCuenta,
-              fecha: citaExistente.fecha,
+              fecha: fechaNueva ,
               horaInicio: new Date(`${programacionDateStr}T${citaExistente.horaInicio}`),
               horaFin: new Date(`${programacionDateStr}T${citaExistente.horaFin}`),
               tiempoPromedio: programacion.tiempoPromedio,
@@ -165,6 +168,7 @@ export class CitasIndexComponent implements OnInit {
               financiamiento: citaExistente.financiamiento // Asigna el valor
             }));
           } else {
+          
             citas.push(new CitaListado({
               idPaciente: 'Sin Asignar',
               nroCuenta: 'Sin Asignar',
@@ -186,14 +190,16 @@ export class CitasIndexComponent implements OnInit {
   
           inicio.setTime(inicio.getTime() + tiempoDuracion * 60000);
         }
-  
+        console.log("citaexistente",citasExistente)
         citasExistente.filter(cita => cita.esAdicional).forEach(citaExistente => {
           const citaHoraInicio = new Date(`${programacionDateStr}T${citaExistente.horaInicio}`);
           const citaHoraFin = new Date(`${programacionDateStr}T${citaExistente.horaFin}`);
+          const fechaNuevita = new Date(citaExistente.fecha + 'T00:00:00');
+            console.log("fechaNuevita",fechaNuevita)
           citas.push(new CitaListado({
             idPaciente: citaExistente.idPaciente,
             nroCuenta: citaExistente.nroCuenta,
-            fecha: citaExistente.fecha,
+            fecha: fechaNuevita,
             horaInicio: citaHoraInicio,
             horaFin: citaHoraFin,
             tiempoPromedio: programacion.tiempoPromedio,
@@ -210,6 +216,7 @@ export class CitasIndexComponent implements OnInit {
         });
   
         this.citas = citas.sort((a, b) => a.horaInicio.getTime() - b.horaInicio.getTime());
+        console.log("todas las citas",this.citas)
       },
       error => {
         console.error('Error al buscar citas por programación', error);
@@ -222,6 +229,13 @@ export class CitasIndexComponent implements OnInit {
     if (!time) return '';
     const [hours, minutes] = time.split(':');
     return `${hours}:${minutes}`;
+  }
+
+  formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   

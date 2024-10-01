@@ -55,15 +55,24 @@
               class="text-danger">El teléfono debe ser un número.</small>
           </div>
         </div>
+        <div class="col-md-6">
 
-        <mat-form-field>
-          <mat-label>Toppings</mat-label>
-          <mat-select formControlName="roleIds" multiple>
-            <mat-option [value]="rol.id" *ngFor="let rol of roles">
-              {{ rol.rolName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        </div>
+        <div class="form-group col-12">
+          <mat-form-field style="width: 100%">
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="roleIds" multiple>
+              <mat-option [value]="rol.id" *ngFor="let rol of roles">
+                {{ rol.rolName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <small
+              *ngIf="(crearMedicoForm.get('roleIds')?.dirty || crearMedicoForm.get('roleIds')?.touched) && crearMedicoForm.get('roleIds')?.hasError('required')"
+              class="text-danger">Debe seleccionar al menos un rol.</small>
+          </div>
+        </div>
 
       </div>
     </div>

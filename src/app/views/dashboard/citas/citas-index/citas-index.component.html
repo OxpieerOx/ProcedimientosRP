@@ -107,11 +107,12 @@
                   <td>
                     <span class="badge badge-custom"
                     [ngClass]="{
-                            'badge-custom-success': cita.estado === 'ABIERTO',
-                            'badge-custom-warning': cita.estado === 'PAGADO'
-                          }">
-                      {{ cita.estado }}
-                    </span>
+                        'badge-custom-success': cita.estado === 'ABIERTO',
+                        'badge-custom-warning': cita.estado === 'PAGADO',
+                        'badge-custom-danger': cita.estado === 'ATENDIDO'
+                    }">
+                  {{ cita.estado }}
+              </span> 
                   </td>
                   <td>
                     <!-- Badge personalizado para 'Es Adicional' -->

@@ -3,6 +3,7 @@ import { Rol } from '../models/rol.mode';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, map } from 'rxjs';
+import { CodigoRolEnum } from "../models/enums/codigo-rol.enum";
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   observe: 'response' as 'response'
@@ -21,7 +22,7 @@ export class RolService {
     this.role = new Rol()
    }
 
-   obtenerRoles(): Observable<Rol[]> {
+   obtenerRolesPorCodigo(codigoRol: CodigoRolEnum): Observable<Rol[]> {
     const token = localStorage.getItem('token');
     const httpOptions = {
       headers: new HttpHeaders({
@@ -29,7 +30,7 @@ export class RolService {
         'Authorization': `Bearer ${token}`
       })
     };
-    return this.http.get<{ result: boolean, data: Rol[] }>(this.urlService, httpOptions)
+    return this.http.get<{ result: boolean, data: Rol[] }>(`${this.urlService}/codigo/${codigoRol}`, httpOptions)
       .pipe(map(response => response.data));
    }
 

@@ -94,4 +94,24 @@ export class CitaService {
     return this.http.get<{ result: boolean, data: CitaMedicoProcedimientoResponse[] }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
+
+  filtrarCitas(username?: string, fecha?: string, idPaciente?: number, nroCuenta?: string): Observable<Cita[]> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+
+    const params: any = {};
+    if (username) params.idMedico = username;
+    if (fecha) params.fecha = fecha;
+    if (idPaciente) params.idPaciente = idPaciente;
+    if (nroCuenta) params.nroCuenta = nroCuenta;
+
+    const url = `${this.urlService}/filtrar`;
+    return this.http.get<{ result: boolean, data: Cita[] }>(url, { headers: httpOptions.headers, params })
+      .pipe(map(response => response.data));
+  }
 }

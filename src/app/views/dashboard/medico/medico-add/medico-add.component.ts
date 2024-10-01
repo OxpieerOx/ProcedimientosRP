@@ -4,6 +4,8 @@ import { MedicoService } from "../../../../services/medico.service";
 import { MatDialogRef } from "@angular/material/dialog";
 import { RolService } from "../../../../services/rol.service";
 import { Rol } from "../../../../models/rol.mode";
+import { CodigoRolEnum } from "../../../../models/enums/codigo-rol.enum";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-medico-add',
@@ -20,7 +22,8 @@ export class MedicoAddComponent implements OnInit {
     private formBuilder: FormBuilder,
     private medicoService: MedicoService,
     private dialogRef: MatDialogRef<MedicoAddComponent>,
-    private roleService: RolService
+    private roleService: RolService,
+    private snackBar: MatSnackBar
   ) {
     this.crearMedicoForm = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -36,7 +39,7 @@ export class MedicoAddComponent implements OnInit {
   }
 
   cargarRoles() {
-    this.roleService.obtenerRoles().subscribe(
+    this.roleService.obtenerRolesPorCodigo(CodigoRolEnum.MEDICO).subscribe(
       roles => {
         this.roles = roles;
       });
@@ -50,6 +53,24 @@ export class MedicoAddComponent implements OnInit {
   }
 
   onGuardar() {
-
+    if (this.crearMedicoForm.valid) {
+      let crearMedicoRequestBody = this.crearMedicoForm.value;
+      let roles = this.crearMedicoForm.value.roleIds;
+      delete crearMedicoRequestBody.roleIds;
+      this.medicoService.crearMedico(crearMedicoRequestBody, roles).subscribe(
+        {
+          next: () => {
+            this.snackBar.open('Médico creado correctamente', 'Cerrar', {
+              duration: 2000
+            });
+          },
+          error: (error) => {
+            this.snackBar.open('Error al crear médico', 'Cerrar', {
+              duration: 2000
+            });
+            this.crearMedicoForm.reset();
+          }
+        });
+    }
   }
 }

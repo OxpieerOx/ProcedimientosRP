@@ -6,6 +6,7 @@ import { ProgramacionIndexComponent } from './programacion/programacion-index/pr
 import { RoleGuardGuard } from 'src/app/guards/role-guard.guard';
 import { CitasIndexComponent } from './citas/citas-index/citas-index.component';
 import { MedicoIndexComponent } from "./medico/medico-index/medico-index.component";
+import { AtencionIndexComponent } from './atencion/atencion-index/atencion-index.component';
 
 
 
@@ -15,11 +16,6 @@ const routes: Routes = [
   path: '',
   component:DashboardComponent,
   children: [
-    {
-      path: '',
-      redirectTo: 'home',
-      pathMatch: 'full'
-    },
     {
       path: 'home', component: HomeComponent, data: { titulo: 'Dashboard' }
     },
@@ -34,6 +30,10 @@ const routes: Routes = [
     {
       path: 'medicos', component: MedicoIndexComponent, data: { titulo: 'Medicos' } ,
       canActivate: [RoleGuardGuard]
+    },
+    {
+      path: 'atencion', component: AtencionIndexComponent, data: { titulo: 'Atencion' } ,
+
     },
     { path: '**', redirectTo: '' }
 

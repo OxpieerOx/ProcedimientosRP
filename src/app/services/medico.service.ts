@@ -78,7 +78,7 @@ export class MedicoService {
       }),
       params: params
     };
-    const url = `${this.urlService}/medico`;
+    const url = `${this.urlService}`;
     return this.http.post<void>(url, requestBody, httpOptions);
   }
 }
