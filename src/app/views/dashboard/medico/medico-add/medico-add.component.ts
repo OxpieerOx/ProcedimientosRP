@@ -6,6 +6,7 @@ import { RolService } from "../../../../services/rol.service";
 import { Rol } from "../../../../models/rol.mode";
 import { CodigoRolEnum } from "../../../../models/enums/codigo-rol.enum";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-medico-add',
@@ -23,7 +24,8 @@ export class MedicoAddComponent implements OnInit {
     private medicoService: MedicoService,
     private dialogRef: MatDialogRef<MedicoAddComponent>,
     private roleService: RolService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService
   ) {
     this.crearMedicoForm = this.formBuilder.group({
       nombre: ['', Validators.required],
@@ -54,17 +56,21 @@ export class MedicoAddComponent implements OnInit {
 
   onGuardar() {
     if (this.crearMedicoForm.valid) {
+      this.spinner.show();
       let crearMedicoRequestBody = this.crearMedicoForm.value;
       let roles = this.crearMedicoForm.value.roleIds;
       delete crearMedicoRequestBody.roleIds;
       this.medicoService.crearMedico(crearMedicoRequestBody, roles).subscribe(
         {
           next: () => {
+            this.spinner.hide();
             this.snackBar.open('Médico creado correctamente', 'Cerrar', {
               duration: 2000
             });
+            this.dialogRef.close({success: true});
           },
           error: (error) => {
+            this.spinner.hide();
             this.snackBar.open('Error al crear médico', 'Cerrar', {
               duration: 2000
             });

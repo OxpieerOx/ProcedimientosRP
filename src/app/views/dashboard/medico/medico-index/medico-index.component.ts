@@ -91,10 +91,6 @@ export class MedicoIndexComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        this.snackBar.open(result.message, 'Cerrar', {
-          duration: 10000,
-          panelClass: ['snack-bar-success']
-        });
         this.cargarMedicos();
       } else {
         console.log('Operación cancelada o sin éxito');

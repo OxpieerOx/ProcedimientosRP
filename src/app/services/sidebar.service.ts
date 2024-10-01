@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RolService } from './rol.service';
 import { BehaviorSubject } from 'rxjs';
+import { Rol } from "../models/rol.mode";
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +38,10 @@ export class SidebarService {
     },
   ];
 
-  private rolePermissions: { [key: number]: string[] } = {
-    5: ['Home', 'Programacion', 'Citas', 'Médicos'],
-    4: ['Atencion'],
+  private rolePermissions: { [key: string]: string[] } = {
+    'MEDICO': ['Atencion'],
+    'ADMISION': ['Home', 'Programacion', 'Citas'],
+    'ADMIN': ['Médicos']
   };
 
   constructor(private rolService: RolService) {
@@ -50,14 +52,29 @@ export class SidebarService {
     this.rolService.findRolesByUsername(username).subscribe(
       roles => {
         const roleIds = roles.map(role => role.id); // Obtener todos los IDs de roles del usuario
-        const filteredMenu = this.filterMenuByRoles(this.initialMenu, roleIds);
+        const roleCodigos = roles.map(role => role.codigo);
+        //const filteredMenu = this.filterMenuByRoles(this.initialMenu, roleIds);
+        const filteredMenu = this.obtenerMenuPorRoles(roles);
         this._menu.next(filteredMenu); // Emitir el menú filtrado
         localStorage.setItem('roleIds', JSON.stringify(roleIds));
+        localStorage.setItem('roleCodigos', JSON.stringify(roleCodigos));
       },
       error => {
         console.error('Error al cargar roles:', error);
       }
     );
+  }
+
+  private obtenerMenuPorRoles(roles: Rol[]): any[] {
+    const roleCodigos = roles.map(role => role.codigo);
+    const allowedTitles = new Set<string>();
+    roleCodigos.forEach(codigo => {
+      const permissions = this.rolePermissions[codigo];
+      if (permissions) {
+        permissions.forEach(title => allowedTitles.add(title));
+      }
+    });
+    return this.initialMenu.filter(item => allowedTitles.has(item.titulo));
   }
 
   filterMenuByRoles(menu: any[], roleIds: number[]): any[] {

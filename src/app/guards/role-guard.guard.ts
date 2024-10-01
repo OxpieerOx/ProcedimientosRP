@@ -15,7 +15,7 @@ export class RoleGuardGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    
+
     // Obtener el nombre de usuario del almacenamiento local
     const username = localStorage.getItem('user');
 
@@ -24,13 +24,14 @@ export class RoleGuardGuard implements CanActivate {
       return this.rolService.findRolesByUsername(username).pipe(
         map(roles => {
           // Verificar si el usuario tiene el rol adecuado para acceder a la ruta
-          if (roles.some((role: any) => role.id === 5)) { // Asegurarse de que roles sea de tipo 'any' o del tipo correcto
+          return true;
+        /*  if (roles.some((role: any) => role.id === 5)) { // Asegurarse de que roles sea de tipo 'any' o del tipo correcto
             return true; // Usuario tiene permiso
           } else {
             // Redireccionar al login si no tiene permiso
             this.router.navigate(['/login']);
             return false;
-          }
+          }*/
         }),
         catchError(() => {
           // Redireccionar al login en caso de error

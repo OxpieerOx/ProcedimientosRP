@@ -5,11 +5,14 @@
       <div class="card">
         <div class="card-body">
           <div class="form-row justify-content-between align-items-center">
-            <div class="col-md-4 mb-3">
+          <!--  <div class="col-md-4 mb-3">
               <label for="selectServicio">Seleccione el servicio:</label>
               <select class="form-control" id="selectServicio" [(ngModel)]="selectServicio" (ngModelChange)="onServicioChange()">
                 <option *ngFor="let servicio of servicios" [value]="servicio.serviceId">{{ servicio.serviceName }}</option>
               </select>
+            </div>-->
+            <div class="col-2">
+
             </div>
             <button mat-raised-button color="primary" (click)="openDialogAddMedico()" >Agregar Médico</button>
             <!-- Calendar for selecting date and time -->
@@ -96,7 +99,9 @@
                 <th>Apellido</th>
                 <th>Email</th>
                 <th>Teléfono</th>
+<!--
                 <th class="text-nowrap w100">Acciones</th>
+-->
               </tr>
               </thead>
               <tbody>
@@ -105,11 +110,11 @@
                 <td>{{ medico.apellido}}</td>
                 <td>{{ medico.email }}</td>
                 <td>{{ medico.telefono }}</td>
-                <td>
+              <!--  <td>
                   <button mat-icon-button  *ngIf="medico.id" (click)="openDialogEditMedico(medico)"  >
                     <mat-icon>edit</mat-icon>
                   </button>
-                </td>
+                </td>-->
               </tr>
               </tbody>
             </table>
