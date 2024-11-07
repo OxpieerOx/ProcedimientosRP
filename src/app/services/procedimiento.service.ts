@@ -53,4 +53,17 @@ export class ProcedimientoService {
     return this.http.get<{ result: boolean, data: Procedimiento }>(url, httpOptions)
       .pipe(map(response => response.data));
   }
+
+  obtenerProcedimientoPorNombreYServicio(nombre: string, idServicio: number): Observable<Procedimiento> {
+    const token = localStorage.getItem('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    const url = `${this.urlService}/buscar/${nombre}/${idServicio}`;
+    return this.http.get<{ result: boolean, data: Procedimiento }>(url, httpOptions)
+      .pipe(map(response => response.data));
+  }
 }

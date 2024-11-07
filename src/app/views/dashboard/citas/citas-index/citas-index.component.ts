@@ -76,7 +76,7 @@ export class CitasIndexComponent implements OnInit {
     const selectedServicio = this.servicios.find(s => s.serviceId == servicioId);
     console.log('Selected Servicio:', selectedServicio);
     if (selectedServicio && selectedServicio.serviceName !== 'Cardiologia') {
-      this.procedimientoService.obtenerProcedimientoPorNombre('General').subscribe(data => {
+      this.procedimientoService.obtenerProcedimientoPorNombreYServicio('General',this.selectServicio).subscribe(data => {
         console.log('Procedimientos:', data); // Verifica si el procedimiento se recibe correctamente
         this.procedimientos = [data];
         if (this.procedimientos.length > 0) {

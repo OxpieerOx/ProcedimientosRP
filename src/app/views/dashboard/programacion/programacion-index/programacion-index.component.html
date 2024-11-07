@@ -85,7 +85,7 @@
                   <td>{{ programacion.horaFin }}</td>
                   <td>{{ programacion.tiempoPromedio }}</td>
                   <td>{{ programacion.fechaRegistro }}</td>
-                  <td>{{ programacion.medico.nombre }}</td>
+                  <td>{{ programacion.medico.nombre }} {{ programacion.medico.apellido }}</td>
                   <td>{{ programacion.procedimiento.nombre }}</td>
                   <td>
                     <button mat-icon-button (click)="openDialog(programacion.id, programacion.procedimiento.id, selectServicio)">

@@ -57,7 +57,7 @@
         <div class="form-group col-md-6">
           <label for="medico">Médico</label>
           <select class="form-control" id="medico" formControlName="medicoid">
-            <option *ngFor="let medico of medicos" [ngValue]="medico.id">{{ medico.nombre }}</option>
+            <option *ngFor="let medico of medicos" [ngValue]="medico.id">{{ medico.nombre }} {{ medico.apellido }}</option>
           </select>
           <div *ngIf="programacionForm.get('medico')?.invalid && (programacionForm.get('medico')?.dirty || programacionForm.get('medico')?.touched)">
             <small class="text-danger">El médico es requerido.</small>
