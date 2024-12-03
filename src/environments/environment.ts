@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  apiEndPoint:"http://localhost:8089/"
+  apiEndPoint: "http://192.168.2.12:8089/"
 };
-
 
 /*apiEndPoint:"http://localhost:8080/"
  * For easier debugging in development mode, you can import the following file
